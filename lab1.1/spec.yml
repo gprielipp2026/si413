@@ -19,8 +19,8 @@ example_program: |
     "\"same as above\"";
     '"even easier option"';
     "'or like this'";
-    '';
-    "";
+    ''; # empty literal
+    ""; # empty literal
     ["This is a type of string literal"];
     ['This is another way to do a string literal'];
     ['This string' + ' is ' + ' concatenated.'];
@@ -59,6 +59,7 @@ example_output_2: |
 # Task 3
 
 language_syntax: |
+    PROGRAM --> PROGRAM STATEMENT | epsilon
     STATEMENT --> STRING_LITERAL; | COMMENT
     STRING_LITERAL --> "CHARACTER*" | 'CHARACTER*'
     CHARACTER --> [:ascii:] | \' | \"
@@ -75,6 +76,7 @@ language_syntax: |
     
 
 language_semantics: |
+  - A PROGRAM consists of a collection of STATEMENTs or is a blank file (denoted by epsilon) 
   - Any behavior that is not clearly defined in the syntax should result in a SyntaxError.
   - A STRING_LITERAL is 0 or more CHARACTERs trapped inside qoutes
   - Any character is available to use in a STRING_LITERAL so long as it does not end the STRING_LITERAL and cause a SyntaxError. Should the character abruptly end a STRING_LITERAL, it shall be escaped with a backslash.
