@@ -76,7 +76,8 @@ language_syntax: |
     
 
 language_semantics: |
-  - A PROGRAM consists of a collection of STATEMENTs or is a blank file (denoted by epsilon) 
+  - A PROGRAM consists of a collection of STATEMENTs or is a blank file (denoted by epsilon).
+  - Whitespace is skipped when parsing unless it is part of a STRING_LITERAL.
   - Any behavior that is not clearly defined in the syntax should result in a SyntaxError.
   - A STRING_LITERAL is 0 or more CHARACTERs trapped inside qoutes
   - Any character is available to use in a STRING_LITERAL so long as it does not end the STRING_LITERAL and cause a SyntaxError. Should the character abruptly end a STRING_LITERAL, it shall be escaped with a backslash.
