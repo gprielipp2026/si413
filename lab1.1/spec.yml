@@ -95,7 +95,10 @@ reviewer_for: Nate Schmidt
 
 reviewed_by: Nate Schmidt
 
-review_passed: N
+review_passed: Y
 
 reviewer_comments: <
-    BLAH BLAH BLAH
+    I think that the syntax is extremely easy to read and understand. 
+    The only thing I worry is that it is very example based and the directions say to not use examples. I would ask Prof Roche if its good.
+    The only thing I don't understand completely is line 35 where there is a print inside of a print.
+    I do not see any UB.
