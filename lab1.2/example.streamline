@@ -1,0 +1,13 @@
+[string literal, nothing should happen here]
+d*([this should print out])*b
+
+-> this is a comment
+
+d*([print this out too])*b
+
+-> try concatenation
+[junk]~[more junk] ~ [space junk]
+
+d *   ( [ spaces in print ] ) * b
+
+d*([concatenate]~[ me now])*b

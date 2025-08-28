@@ -1,0 +1,88 @@
+# SI413 Fall 2025 Unit 1 Labs
+
+language_name: streamLine
+
+notes_from_prof: |
+    Language designed by Matt Irving and reviewed by Tristan Lee.
+
+    This language looks weirder than it actually is.
+    Two interesting features are the use of backwards brackets for
+    string reversal, and the slightly unusual escaping in
+    string literals.
+
+
+example_program: |
+    ->this is a comment
+    d*([print a single string literal])*b
+    d*(][reverse me][)*b
+    d*([___])*b ->reads input and prints it
+    d*([superb]~[owl])*b
+    ->this prints a reverse string concatenated with another string
+    ->concatenated with an inputted string
+    d*(][gnirts a si siht][~[ that  says ]~[___])*b
+    d*([escape $] [$$]])*b
+
+example_input_1: |
+    greetings
+    hello world
+
+example_output_1: |
+    print a single string literal
+    em esrever
+    greetings
+    superbowl
+    this is a string that says hello world
+    escape ] [$]
+
+example_input_2: |
+    OF COURSE
+    streamLine is the best coding language
+
+example_output_2: |
+    print a single string literal
+    em esrever
+    OF COURSE
+    superbowl
+    this is a string that says streamLine is the best coding language
+    escape ] [$]
+
+
+language_syntax: |
+    An ordinary character is any single character other than a close bracket ]
+
+    A special phrase is one or more dollar signs followed by either
+    three underscores ___ or a close bracket ]
+
+    A string literal is a open bracket [, followed by a sequence of ordinary
+    characters and special phrases, followed by a close bracket ]
+
+    Concatenation is performed by putting two string literals next to each other,
+    separated by a tilde ~.
+
+    Reversal of a string literal is performed by putting a string literal
+    between a closed bracket ] and an open bracket [.
+
+    Input of a string literal is performed by putting three underscores ___
+    between an open bracket [ and a closed bracket ].
+
+    Printing of a string literal can be performed by putting a string literal
+    between the letter d, asterisk *, open parenthesis,
+    and closed parenthesis, asterisk, the letter b. Ex: d*([string literal])*b
+
+    To comment, use an arrow -> followed by any amount of text within that line.
+
+language_semantics: |
+    A closed bracket can be included in a string literal with a special
+    phrase with a closed bracket: $] Open brackets can be included in a
+    string literal without issues, but all closed brackets need to be
+    put in a special phrase.
+
+    A string literal can be three underscores by placing a dollar sign $
+    before the first underscore to make a special phrase: [$___]
+
+    Special phrases themselves can also be included by simply putting another
+    dollar sign in front of the phrases. If those phrases are to be included, another
+    dollar sign is to be placed in front, so like
+    $$$$___ to include $$$___ in the string literal.
+
+    Concatenation will concatenate string literals from left to right.
