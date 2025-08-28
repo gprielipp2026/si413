@@ -1,0 +1,51 @@
+# SI413 Lab 1.2: Interpreter for Just Strings language
+
+your_name: George Prielipp
+
+your_alpha: 265112 
+
+used_ai: N # remember to turn in an aichat.md file as well
+
+
+# Task 1
+
+language_name: streamLine 
+
+
+# Task 2
+
+example_program: |
+  -> print out a prompt
+  d*([What is your name?])*b
+  -> tell them hi (read in their name)
+  d*([Hello ]~[___])*b
+  -> reverse a string as a farewell
+  d*(]Goodbye.[)*b
+
+
+example_input_1: |
+    John Doe 
+
+example_output_1: |
+    What is your name?
+    Hello John Doe
+    .eybdooG
+
+example_input_2: |
+    Billy Bob 
+
+example_output_2: |
+    What is your name?
+    Hello Billy Bob 
+    .eybdooG
+
+# Task 4
+
+reviewer_for: Nate Schmidt 
+
+reviewed_by: Nate Schmidt
+
+review_passed: N
+
+reviewer_comments: <
+    BLAH BLAH BLAH
