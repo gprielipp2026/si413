@@ -1,5 +1,7 @@
 [string literal, nothing should happen here]
 d*([this should print out])*b
+d*()*b
+d*([above should be an empty print])*b
 
 -> this is a comment
 
@@ -15,3 +17,13 @@ d*([concatenate]~[ me now])*b
 -> get user input
 d*([Enter your name:])*b
 d*([Hello ]~[___])*b
+
+-> test reverse strings
+d*(]reversed[)*b
+d*([Enter your name:])*b
+d*(]___[~]Hello: [)*b
+
+-> I need more specification on program behavior for this
+d*([Hello ___])*b
+d*(]Your name is ___[)*b
+

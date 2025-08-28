@@ -3,7 +3,7 @@
  *
  * Interpretter for "streamLine"
  *
- * v0.4.0
+ * v0.5.0
  *
  * minor version correlated to what step in Task 3 I have reached
  */
@@ -84,6 +84,10 @@ public class Interp {
       else if(curChar == '[')
       {
         printString = interpretString(); 
+      }
+      else if (curChar == ']')
+      {
+        printString = interpretReverseString();
       }
       else if(curChar == ' ' || curChar == '\t')
       {
@@ -217,6 +221,10 @@ public class Interp {
     {
       return interpretString();
     }
+    else if(curChar == ']')
+    {
+      return interpretReverseString();
+    }
     else
     {
       System.err.println("[ERROR] expected a string after a '~' (concat operator)");
@@ -224,6 +232,47 @@ public class Interp {
     }
     // should never hit here
     return "";
+  }
+
+  /**
+   * Handle reversing a string
+   */
+  private String interpretReverseString()
+  {
+    String string = new String();
+
+    // loop through the input in search of the closing bracket
+    while(!eof)
+    {
+      advance();
+
+      if(curChar == '[')
+      {
+        // found the end;
+        break;
+      }
+      else if(curChar == '_')
+      {
+        String toReverse = interpretInput();
+        for(char c : toReverse.toCharArray())
+        {
+          string = c + string;
+        }
+      }
+      else if (curChar == '\n')
+      {
+        // expected to find the end of the string
+        System.err.println("[ERROR] expected a '[' to go with the reversed string");
+        System.exit(7);
+      }
+      else
+      {
+        // reverse the string
+        string = curChar + string;
+      }
+    }
+
+    return string;
   }
 
   /**
@@ -250,6 +299,9 @@ public class Interp {
           break;
         case '[':
           prevString = interpretString();
+          break;
+        case ']':
+          prevString = interpretReverseString();
           break;
         case '~':
           prevString = prevString + interpretConcat();
