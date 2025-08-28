@@ -21,6 +21,8 @@ example_program: |
   d*([Hello ]~[___])*b
   -> reverse a string as a farewell
   d*(]Goodbye.[)*b
+  -> output a special phrase
+  d*([3 $$ and 3 $_: ]~[$$$$___])*b
 
 
 example_input_1: |
@@ -30,6 +32,7 @@ example_output_1: |
     What is your name?
     Hello John Doe
     .eybdooG
+    3 $ and 3 _: $$$___
 
 example_input_2: |
     Billy Bob 
@@ -38,6 +41,7 @@ example_output_2: |
     What is your name?
     Hello Billy Bob 
     .eybdooG
+    3 $ and 3 _: $$$___
 
 # Task 4
 
