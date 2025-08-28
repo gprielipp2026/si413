@@ -3,7 +3,7 @@
  *
  * Interpretter for "streamLine"
  *
- * v0.2.0
+ * v0.4.0
  *
  * minor version correlated to what step in Task 3 I have reached
  */
@@ -17,6 +17,8 @@ public class Interp {
   private FileReader fileReader;
   private boolean eof;
   private boolean doAdvance;
+  private Scanner inputScanner;
+
   /** 
    * Create the fileReader and set up tracking vars
    */
@@ -32,13 +34,16 @@ public class Interp {
       System.err.println("[ERROR] File not found: '" + filename + "'");
       System.exit(7);
     }
-  
+
+    inputScanner = new Scanner(System.in);  
+    inputScanner.useDelimiter("\n");
   }
 
   // read in the next character and store it in curChar
   // set eof if the end of the file has been reached
   private void advance()
   {
+    if (!doAdvance) { doAdvance = true; return; }
     // cannot read past the end of the file
     try {
       int val = fileReader.read();
@@ -50,6 +55,7 @@ public class Interp {
       }
 
       curChar = (char)val;
+      //System.err.println("[DEBUG] curChar = " + curChar);
     } catch (IOException e) {
       System.err.println("[ERROR] " + e.getMessage());
       System.exit(1);
@@ -62,7 +68,7 @@ public class Interp {
    */
   private void interpretPrint()
   {
-    // d*(STRING_LITERAL)*b
+    // d*(STRING)*b
 
     Stack<Character> toMatch = new Stack<>();
     // add the chars to match
@@ -81,7 +87,7 @@ public class Interp {
       }
       else if(curChar == ' ' || curChar == '\t')
       {
-        continue;
+        // do nothing - let it advance  
       }
       else if(curChar == '~')
       {
@@ -98,7 +104,7 @@ public class Interp {
 
       advance();
     }
-    
+
     // successfully interpretted a print statement
     System.out.println(printString);
   }
@@ -128,12 +134,46 @@ public class Interp {
       {
         break; // found the end of the string        
       }
-    
-      // add the character to the string
-      string += curChar;
+      // see if an input is in the string
+      else if(curChar == '_')
+      {
+        string += interpretInput();
+      }
+      else{
+        // add the character to the string
+        string += curChar;
+      } 
     }
 
     return string;
+  }
+
+  /**
+   * Grab user input and return it as a string
+   */
+  private String interpretInput()
+  {
+    int count = 0;
+    // read in the full input type
+    while(!eof && curChar == '_')
+    {
+      count++;
+      advance();
+    } 
+
+    // make sure the format was right
+    // TODO; refactor this - not sure this is right
+    if (count != 3)
+    {
+      System.err.println("[ERROR] input string is not correct");
+      System.exit(7);
+    }
+
+    // it was good - need to read the curChar again wherever this was called from
+    doAdvance = false;
+
+    // get the user's input
+    return inputScanner.next();
   }
 
   /**
@@ -152,11 +192,11 @@ public class Interp {
       doAdvance = false;
       return;
     }
-    
+
     // read to the end of the line otherwise
     while(!eof && curChar != '\n')
       advance();
-    
+
   }
 
   /**
@@ -171,7 +211,7 @@ public class Interp {
     // ignore whitespace
     while (!eof && (curChar == ' ' || curChar == '\t'))
       advance();
-    
+
     // found the string
     if (curChar == '[')
     {
@@ -192,11 +232,8 @@ public class Interp {
   public void run() {
     while(!eof)
     {
-      if (doAdvance)
-        advance();
-      else
-        doAdvance = true; // make sure it will go on the next one
-      
+      advance();
+
       // This is for the first char of a line (other stuff can happen inside
       // these functions)
       String prevString = ""; // this is essentially to allow junk strings on a
@@ -216,7 +253,7 @@ public class Interp {
           break;
         case '~':
           prevString = prevString + interpretConcat();
-        // comments have to be on a newline
+          // comments have to be on a newline
         case '-':
           interpretComment();
           break;

@@ -11,3 +11,7 @@ d*([print this out too])*b
 d *   ( [ spaces in print ] ) * b
 
 d*([concatenate]~[ me now])*b
+
+-> get user input
+d*([Enter your name:])*b
+d*([Hello ]~[___])*b
