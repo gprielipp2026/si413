@@ -7,39 +7,43 @@ used_ai: N # remember to turn in an aichat.md file as well
 
 # Task 1
 
-language_name: cheese 
-
+language_name: mashup 
 
 # Task 2
 
 example_program: |
-    'simple literal';
-    "another literal";
-    '\'this is how to use the same string character\'';
-    "\"same as above\"";
-    '"even easier option"';
-    "'or like this'";
-    ''; # empty literal
-    ""; # empty literal
-    ["This is a type of string literal"];
-    ['This is another way to do a string literal'];
-    ['This string' + ' is ' + ' concatenated.'];
-    ["Double" + " qoutes" + " work too"];
-    [r'Reversed string'];
-    [r"Reversed with double qoutes"];
-    [r'hello' + " world" + ' mix-matched qouted additions'];
-    ['This is a prompt: ']; [?];
-    ["Double qoute prompt: "]; [?];
-    [r'Reversed prompt']; [?];
-    [rr"Double reversed"]; [?];
-    [['display this'] + ' and add this'];
-    # Single line comments
-    \# This is
-    a multi line
-    commented
-    block
-    to be ignored 
-    \#
+    # below are example things that are valid in this language - not part of the example programs 
+     'simple literal';
+     "another literal";
+     '\'this is how to use the same string character\'';
+     "\"same as above\"";
+     '"even easier option"';
+     "'or like this'";
+     ''; # empty literal
+     ""; # empty literal
+     ["This is a type of string literal"];
+     ['This is another way to do a string literal'];
+     ['This string' + ' is ' + ' concatenated.'];
+     ["Double" + " qoutes" + " work too"];
+     [r'Reversed string'];
+     [r"Reversed with double qoutes"];
+     [r'hello' + " world" + ' mix-matched qouted additions'];
+     ['This is a prompt: ']; [?];
+     ["Double qoute prompt: "]; [?];
+     [r'Reversed prompt']; [?];
+     [rr"Double reversed"]; [?];
+     #
+    # Single line comments are possible if the ending tag is on the same line #
+
+    # example program 1 (for input 1) #
+    ['Enter a string:'];
+    [?];
+
+    # Yes, I do want two different example programs. #
+
+    # example program 2 (for input 2) #
+    ['Enter a string to be reversed:'];
+    [r?];
 
 example_input_1: |
     program: Enter a string:
@@ -59,35 +63,31 @@ example_output_2: |
 # Task 3
 
 language_syntax: |
-    PROGRAM --> PROGRAM STATEMENT | epsilon
-    STATEMENT --> STRING_LITERAL; | COMMENT
+    PROGRAM --> PROGRAM EXPRESSION | epsilon
+    EXPRESSION --> PRINT; | STATEMENT; | COMMENT
+    STATEMENT --> STRING
+    STRING --> STRING + STRING | (STRING) | rSTRING | STRING_LITERAL | INPUT
     STRING_LITERAL --> "CHARACTER*" | 'CHARACTER*'
     CHARACTER --> [:ascii:] | \' | \"
-    STRING_LITERAL --> STRING_LITERAL + STRING_LITERAL
-    STRING_LITERAL --> COMMAND
-    COMMAND --> INPUT | PRINT | REVERSED_STRING
-    REVERSED_STRING --> rSTRING_LITERAL
     INPUT --> ?
-    PRINT --> [STRING_LITERAL]
-    COMMENT --> SINGLE_LINE | MULTI_LINE
-    SINGLE_LINE --> #[:ascii:]
-    MULTI_LINE --> \# MIDDLE \#
-    MIDDLE --> [:ascii:]*
+    PRINT --> [STATEMENT]
+    COMMENT --> #[:ascii:]*#
     
 
 language_semantics: |
-  - A PROGRAM consists of a collection of STATEMENTs or is a blank file (denoted by epsilon).
+  - A PROGRAM consists of a collection of EXPRESSIONs or is a blank file (denoted by epsilon).
   - Whitespace is skipped when parsing unless it is part of a STRING_LITERAL.
   - Any behavior that is not clearly defined in the syntax should result in a SyntaxError.
   - A STRING_LITERAL is 0 or more CHARACTERs trapped inside qoutes
   - Any character is available to use in a STRING_LITERAL so long as it does not end the STRING_LITERAL and cause a SyntaxError. Should the character abruptly end a STRING_LITERAL, it shall be escaped with a backslash.
-  - All statements end with a semi-colon, or are a comment.
-  - Everything evaluates to a STRING_LITERAL except COMMENT.
-    * REVERSED_STRING takes the STRING_LITERAL and mirrors the string over its midpoint. 
-    * PRINT evaluates to the STRING_LITERAL that was passed in.
+  - All EXPRESSIONs end with a semi-colon, or are a COMMENT.
+  - Everything evaluates to a STRING except COMMENT.
+    * REVERSED_STRING takes the STRING and mirrors the string over its midpoint. 
+    * PRINT evaluates to the STRING that was passed in.
     * INPUT evaluates to the user input during runtime.
   - Single line comments have one pound sign before any ASCII characters
-  - Multi line comments have a starting and ending pound sign escaped with a backslash with ASCII characters in the middle.
+  - Concatenation is evaluated from left to right
+  - I am leaving PRINT defined how it is so STATEMENT can be extended to include other data types (ie INTEGER, FLOAT, OBJECT, VARIABLE)
 
 # Task 4
 
@@ -95,9 +95,7 @@ reviewer_for: Nate Schmidt
 
 reviewed_by: Nate Schmidt
 
-review_passed: Y
+review_passed: N
 
 reviewer_comments: <
-    I think that the syntax is extremely easy to read and understand. 
-    I worry that it is very example based and the directions say to not use examples. I would ask Prof Roche if its good.
-    The only thing I don't understand completely is line 35 where there is a print inside of a print.
+   
