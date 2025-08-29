@@ -46,18 +46,18 @@ example_program: |
     [r?];
 
 example_input_1: |
-    program: Enter a string:
-    user: Hello World!
+    Hello World!
 
 example_output_1: |
-    program: Hello World! 
+    Enter a string:
+    Hello World! 
 
 example_input_2: |
-    program: Enter a string to be reversed:
-    user: Reverse me.
+    Reverse me.
 
 example_output_2: |
-    program: .em esreveR
+    Enter a string to be reversed:
+    .em esreveR
 
 
 # Task 3
