@@ -12,7 +12,7 @@ language_name: mashup
 # Task 2
 
 example_program: |
-    # below are example things that are valid in this language - not part of the example programs 
+    # below are example things that are valid in this language - not part of the example programs
      'simple literal';
      "another literal";
      '\'this is how to use the same string character\'';
@@ -95,7 +95,9 @@ reviewer_for: Nate Schmidt
 
 reviewed_by: Nate Schmidt
 
-review_passed: N
+review_passed: Y
 
 reviewer_comments: <
-   
+   This language is easy to understand and the syntax is great. The only thing I would possibly change is the example inputs and outputs
+   to not have program and user. I got confused originally that they were supposed to be part of the printed functionality of the 
+   example programs
