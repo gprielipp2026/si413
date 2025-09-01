@@ -3,7 +3,7 @@
  *
  * Interpretter for "streamLine"
  *
- * v0.5.0
+ * v0.6.0
  *
  * minor version correlated to what step in Task 3 I have reached
  */
