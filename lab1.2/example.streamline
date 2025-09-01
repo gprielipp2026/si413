@@ -7,6 +7,10 @@ d*([above should be an empty print])*b
 
 d*([print this out too])*b
 
+d*([this has a comment after it])*b -> this should not cause issues
+-> neither should this d*([i should not be in output])*b
+
+
 -> try concatenation
 [junk]~[more junk] ~ [space junk]
 

@@ -143,6 +143,10 @@ public class Interp {
       {
         string += interpretInput();
       }
+      else if(curChar == '$')
+      {
+        string += interpretSpecialPhrase();
+      }
       else{
         // add the character to the string
         string += curChar;
@@ -225,6 +229,10 @@ public class Interp {
     {
       return interpretReverseString();
     }
+    else if(curChar == '$')
+    {
+      return interpretSpecialPhrase();
+    }
     else
     {
       System.err.println("[ERROR] expected a string after a '~' (concat operator)");
@@ -232,6 +240,37 @@ public class Interp {
     }
     // should never hit here
     return "";
+  }
+
+  /**
+   * Look for the end of the special phrase
+   */
+  private String interpretSpecialPhrase() {
+    String phrase = new String();
+
+    while(!eof)
+    {
+      advance();
+      
+      if (curChar == '$' || curChar == '_')
+      {
+        // do all underscores need to be special phrases or just ___ (3_)?
+        phrase += curChar;
+      }
+      else
+      {
+        // I'm not sure what would error
+        doAdvance = false;
+        break;
+        // System.err.println("Special phrase errors: curChar = " + curChar);
+        // System.exit(7);
+      }
+    }
+
+      
+    if(phrase.length() == 0) phrase = "$"; // did not actually read in stuff
+
+    return phrase;
   }
 
   /**
@@ -255,6 +294,13 @@ public class Interp {
       {
         String toReverse = interpretInput();
         for(char c : toReverse.toCharArray())
+        {
+          string = c + string;
+        }
+      }
+      else if (curChar == '$') {
+        String specialPhrase = interpretSpecialPhrase();
+        for(char c : specialPhrase.toCharArray())
         {
           string = c + string;
         }
