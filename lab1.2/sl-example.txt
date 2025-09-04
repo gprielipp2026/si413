@@ -1,0 +1,9 @@
+->this is a comment
+d*([print a single string literal])*b
+d*(][reverse me][)*b
+d*([___])*b ->reads input and prints it
+d*([superb]~[owl])*b
+->this prints a reverse string concatenated with another string
+->concatenated with an inputted string
+d*(][gnirts a si siht][~[ that  says ]~[___])*b
+d*([escape $] [$$]])*b

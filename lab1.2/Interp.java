@@ -3,7 +3,7 @@
  *
  * Interpretter for "streamLine"
  *
- * v0.6.0
+ * v0.6.1
  *
  * minor version correlated to what step in Task 3 I have reached
  */
@@ -244,10 +244,13 @@ public class Interp {
 
   /**
    * Look for the end of the special phrase
+   *
+   * looking for regex of ($+)___ or ($+)]
    */
   private String interpretSpecialPhrase() {
     String phrase = new String();
-
+    
+    int numUnderscores = 0;
     while(!eof)
     {
       advance();
@@ -256,17 +259,28 @@ public class Interp {
       {
         // do all underscores need to be special phrases or just ___ (3_)?
         phrase += curChar;
+        if(curChar == '_')
+          numUnderscores ++;
+      }
+      else if(curChar == ']')
+      {
+        phrase += curChar;
+        break;
       }
       else
       {
         // I'm not sure what would error
         doAdvance = false;
         break;
-        // System.err.println("Special phrase errors: curChar = " + curChar);
-        // System.exit(7);
       }
     }
-
+  
+    // could have an error if too many or not enough _
+    if(numUnderscores > 0 && numUnderscores != 3)
+    {
+      System.err.println("Special phrase has a mismatch of underscores");
+      System.exit(7);
+    }
       
     if(phrase.length() == 0) phrase = "$"; // did not actually read in stuff
 
@@ -281,14 +295,25 @@ public class Interp {
     String string = new String();
 
     // loop through the input in search of the closing bracket
+    boolean readStringLit = false;
     while(!eof)
     {
       advance();
-
+      
       if(curChar == '[')
       {
         // found the end;
-        break;
+        if(readStringLit)
+          break;
+        else
+        {
+          readStringLit = true;
+          String literal = interpretString();
+          for(char c : literal.toCharArray())
+          {
+            string = c + string;
+          }
+        }
       }
       else if(curChar == '_')
       {
