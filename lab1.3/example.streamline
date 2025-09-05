@@ -1,0 +1,33 @@
+[string literal, nothing should happen here]
+d*([this should print out])*b
+d*()*b
+d*([above should be an empty print])*b
+
+-> this is a comment
+
+d*([print this out too])*b
+
+d*([this has a comment after it])*b -> this should not cause issues
+-> neither should this d*([i should not be in output])*b
+
+
+-> try concatenation
+[junk]~[more junk] ~ [space junk]
+
+d *   ( [ spaces in print ] ) * b
+
+d*([concatenate]~[ me now])*b
+
+-> get user input
+d*([Enter your name:])*b
+d*([Hello ]~[___])*b
+
+-> test reverse strings
+d*(][reversed][)*b
+d*([Enter your name:])*b
+d*(][___][~][Hello: ][)*b
+
+-> I need more specification on program behavior for this
+d*([Hello ___])*b
+d*(][Your name is ___][)*b
+

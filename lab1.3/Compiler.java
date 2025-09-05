@@ -17,9 +17,10 @@ public class Compiler {
   private FileReader fileReader;
   private boolean eof;
   private boolean doAdvance;
-  private Scanner inputScanner;
+  // private Scanner inputScanner;
   private PrintWriter outputFile;
   private List<String> literals;
+  private List<String> variables;
 
   /** 
    * Create the fileReader and set up tracking vars
@@ -41,9 +42,10 @@ public class Compiler {
     }
 
     literals = new ArrayList<>();
+    variables = new ArrayList<>();
 
-    inputScanner = new Scanner(System.in);  
-    inputScanner.useDelimiter("\n");
+    // inputScanner = new Scanner(System.in);  
+    // inputScanner.useDelimiter("\n");
   }
 
   // read in the next character and store it in curChar
@@ -69,6 +71,19 @@ public class Compiler {
     }
   }
 
+  /**
+   * return a new literal name
+   */
+  private String freshLit() {
+    return "@" + String.format("lit%d", literals.size());
+  }
+
+  /**
+   * return a new variable name
+   */
+  private String freshVar() {
+    return "%" + String.format("var%d", variables.size() );
+  }
 
   /**
    * Print statement reached
@@ -82,7 +97,7 @@ public class Compiler {
     for (Character c : (new String("b*)(*d")).toCharArray())
       toMatch.push(c);
 
-    String printString = "";
+    String printVar = "";
     while(!eof && !toMatch.empty())
     {
       // make sure the correct form is matched
@@ -90,11 +105,11 @@ public class Compiler {
         toMatch.pop();
       else if(curChar == '[')
       {
-        printString = interpretString(); 
+        printVar = interpretString(); 
       }
       else if (curChar == ']')
       {
-        printString = interpretReverseString();
+        printVar = interpretReverseString();
       }
       else if(curChar == ' ' || curChar == '\t')
       {
@@ -103,8 +118,8 @@ public class Compiler {
       else if(curChar == '~')
       {
         // handle string concatenation
-        String nextString = interpretConcat();
-        printString = printString + nextString;
+        String concatVar = interpretConcat();
+        printVar = emitConcat(printVar, concatVar);
       }
       else
       {
@@ -119,8 +134,34 @@ public class Compiler {
     // successfully interpretted a print statement
     // System.out.println(printString);
     // need to output a puts command that will execute
-    literals.add(printString);
-    outputFile.println(String.format("call i32 @puts(ptr @lit%d)", literals.size()-1 ));
+    if(printVar.length() == 0) // keeps empty strings from being a problem
+    {
+      printVar = freshLit();
+      literals.add("");
+    }
+    outputFile.println(String.format("call i32 @puts(ptr %s)", printVar ));
+  }
+
+  /**
+   * Emits the code needed to concatenate two strings
+   */
+  private String emitConcat(String varA, String varB) {
+    String newVar = freshVar();
+    variables.add(newVar);
+
+    outputFile.println( String.format("%s = call ptr @concat(ptr %s, ptr %s)", newVar, varA, varB) );
+
+    return newVar;
+  }
+
+  /**
+   * Emits the code needed to reverse a string (from a given variable)
+   */
+  private String emitReverseString(String varA) {
+    String outVar = freshVar();
+    outputFile.println( String.format("%s = call void @reverseString(%s)", outVar, varA) );
+
+    return outVar;
   }
 
   /**
@@ -130,8 +171,9 @@ public class Compiler {
   {
     // read until a ']' or '\n' is found
     // a '\n' before a ']' will throw an error for no close bracket found
+    String finalVar = new String();
     String string = new String();
-
+    boolean readLiteral = true;
     while(!eof)
     { 
       // grab the next char
@@ -151,7 +193,21 @@ public class Compiler {
       // see if an input is in the string
       else if(curChar == '_')
       {
-        string += interpretInput();
+        // string += interpretInput();
+        // now I'm getting the variable for the input result
+        readLiteral = false;
+        // special case where input is inside a string: so I need to concat it to what came before and what comes after
+        if(string.length() > 0) {
+          String litVar = freshLit();
+          literals.add(string);
+          string = new String(); // need to reset it to capture what happens after
+          String inputVar = interpretInput();
+
+          finalVar = emitConcat(litVar, inputVar);
+        } else {
+          finalVar = interpretInput();
+        }
+        
       }
       else if(curChar == '$')
       {
@@ -163,7 +219,22 @@ public class Compiler {
       } 
     }
 
-    return string;
+    if(readLiteral)
+    {
+      finalVar = freshLit();
+      literals.add(string);
+    }
+    else if(string.length() > 0)
+    {
+      // read in an input and need to do the concat stuff again
+      String litVar = freshLit();
+      literals.add(string);
+      string = new String(); // need to reset it to capture what happens after
+
+      finalVar = emitConcat(litVar, finalVar);
+    }
+
+    return finalVar;
   }
 
   /**
@@ -191,7 +262,16 @@ public class Compiler {
     doAdvance = false;
 
     // get the user's input
-    return inputScanner.next();
+    // return inputScanner.next();
+
+    String varUsed = freshVar();
+    variables.add(varUsed);
+
+    // emit the compiled code
+    outputFile.println(String.format("%s = call ptr @getUserInput()", varUsed));
+
+    return varUsed;
+
   }
 
   /**
@@ -303,7 +383,7 @@ public class Compiler {
   private String interpretReverseString()
   {
     String string = new String();
-
+    String finalVar = new String();
     // loop through the input in search of the closing bracket
     boolean readStringLit = false;
     while(!eof)
@@ -318,20 +398,26 @@ public class Compiler {
         else
         {
           readStringLit = true;
-          String literal = interpretString();
-          for(char c : literal.toCharArray())
-          {
-            string = c + string;
-          }
+          String lit = interpretString();
+          finalVar = freshVar();
+          variables.add(finalVar);
+          outputFile.println( String.format("%s = call ptr @reverseString(ptr %s)", finalVar, lit) );
         }
       }
       else if(curChar == '_')
       {
-        String toReverse = interpretInput();
-        for(char c : toReverse.toCharArray())
-        {
-          string = c + string;
+        readStringLit = false;
+        if(string.length() > 0){
+          String inputVar = interpretInput();
+          String litVar = freshLit();
+          literals.add(string);
+          string = "";
+          finalVar = emitReverseString(inputVar);
+          finalVar = emitConcat(finalVar, litVar);
+        } else {
+          finalVar = emitReverseString( interpretInput() );
         }
+        
       }
       else if (curChar == '$') {
         String specialPhrase = interpretSpecialPhrase();
@@ -348,12 +434,24 @@ public class Compiler {
       }
       else
       {
+        // this code block should not be hit
         // reverse the string
-        string = curChar + string;
+        // string = curChar + string;
+        System.err.println("[ERROR] unexcpected character in reverse string");
+        System.exit(7);
       }
     }
 
-    return string;
+    if(!readStringLit)
+    {
+      // must have done an input
+      // need to take what currently exists and concat it again
+      String litVar = freshLit();
+      literals.add(string);
+      finalVar = emitConcat(litVar, finalVar);
+    }
+
+    return finalVar;
   }
 
   /**
@@ -372,6 +470,7 @@ public class Compiler {
     outputFile.println("declare i64 @strlen(ptr noundef)");
     outputFile.println("declare noalias noundef ptr @malloc(i64 noundef) local_unnamed_addr");
     outputFile.println("declare ptr @strcpy(ptr noalias noundef returned writeonly, ptr noalias nocapture noundef readonly) local_unnamed_addr");
+    outputFile.println("declare noundef i32 @__isoc99_scanf(ptr nocapture noundef readonly, ...)");
     emitFunctionDeclarations();
     outputFile.println();
 
@@ -415,10 +514,200 @@ public class Compiler {
   }
 
   /**
+   * Code that should be generated to get user input
+   */
+  private void emitGetUserInputDeclaration() {
+    outputFile.println();
+    outputFile.println("@inputFormat = constant [7 x i8] c\"%[^\\0A]\\0A\\00\"");
+    outputFile.println("define dso_local ptr @getUserInput() local_unnamed_addr {");
+
+    String[] lines = {
+      "%userIn = tail call noalias dereferenceable_or_null(1024) ptr @malloc(i64 noundef 1024)",
+      "call i32 (ptr, ...) @__isoc99_scanf(ptr noundef getelementptr inbounds ([7 x i8], [7 x i8]* @inputFormat, i64 0, i64 0), ptr noundef %userIn)",
+      "ret ptr %userIn"
+    };
+
+    for(String line : lines)
+    {
+      outputFile.println("\t" + line);
+    }
+
+    outputFile.println("}");
+  }
+
+  /**
+   * Function declaration for reverseString
+   */
+  private void emitReverseStringDeclaration() {
+    outputFile.println();
+    outputFile.println("define dso_local ptr @reverseString(ptr nocapture noundef %0) {");
+
+    String[] lines = {
+        "%2 = tail call i64 @strlen(ptr noundef nonnull dereferenceable(1) %0) #6",
+  "%3 = trunc i64 %2 to i32",
+  "%4 = shl i64 %2, 32",
+  "%5 = add i64 %4, 4294967296",
+  "%6 = ashr exact i64 %5, 32",
+  "%7 = tail call noalias ptr @malloc(i64 noundef %6) #7",
+  "%8 = icmp sgt i32 %3, 0",
+  "br i1 %8, label %9, label %90",
+"",
+"9:                                                ; preds = %1",
+  "%10 = and i64 %2, 4294967295",
+  "%11 = icmp ult i64 %10, 8",
+  "br i1 %11, label %72, label %12",
+"",
+"12:                                               ; preds = %9",
+  "%13 = add nsw i64 %10, -1",
+  "%14 = add i32 %3, -1",
+  "%15 = trunc i64 %13 to i32",
+  "%16 = sub i32 %14, %15",
+  "%17 = icmp sgt i32 %16, %14",
+  "%18 = icmp ugt i64 %13, 4294967295",
+  "%19 = or i1 %17, %18",
+  "br i1 %19, label %72, label %20",
+"",
+"20:                                               ; preds = %12",
+  "%21 = icmp ult i64 %10, 32",
+  "br i1 %21, label %51, label %22",
+"",
+"22:                                               ; preds = %20",
+  "%23 = and i64 %2, 31",
+  "%24 = sub nsw i64 %10, %23",
+  "br label %25",
+"",
+"25:                                               ; preds = %25, %22",
+  "%26 = phi i64 [ 0, %22 ], [ %45, %25 ]",
+  "%27 = xor i64 %26, -1",
+  "%28 = add i64 %2, %27",
+  "%29 = shl i64 %28, 32",
+  "%30 = ashr exact i64 %29, 32",
+  "%31 = getelementptr inbounds i8, ptr %0, i64 %30",
+  "%32 = getelementptr inbounds i8, ptr %31, i64 -15",
+  "%33 = bitcast ptr %32 to <16 x i8>*",
+  "%34 = load <16 x i8>, <16 x i8>* %33, align 1, !tbaa !5",
+  "%35 = shufflevector <16 x i8> %34, <16 x i8> poison, <16 x i32> <i32 15, i32 14, i32 13, i32 12, i32 11, i32 10, i32 9, i32 8, i32 7, i32 6, i32 5, i32 4, i32 3, i32 2, i32 1, i32 0>",
+  "%36 = getelementptr inbounds i8, ptr %31, i64 -16",
+  "%37 = getelementptr inbounds i8, ptr %36, i64 -15",
+  "%38 = bitcast ptr %37 to <16 x i8>*",
+  "%39 = load <16 x i8>, <16 x i8>* %38, align 1, !tbaa !5",
+  "%40 = shufflevector <16 x i8> %39, <16 x i8> poison, <16 x i32> <i32 15, i32 14, i32 13, i32 12, i32 11, i32 10, i32 9, i32 8, i32 7, i32 6, i32 5, i32 4, i32 3, i32 2, i32 1, i32 0>",
+  "%41 = getelementptr inbounds i8, ptr %7, i64 %26",
+  "%42 = bitcast ptr %41 to <16 x i8>*",
+  "store <16 x i8> %35, <16 x i8>* %42, align 1, !tbaa !5",
+  "%43 = getelementptr inbounds i8, ptr %41, i64 16",
+  "%44 = bitcast ptr %43 to <16 x i8>*",
+  "store <16 x i8> %40, <16 x i8>* %44, align 1, !tbaa !5",
+  "%45 = add nuw i64 %26, 32",
+  "%46 = icmp eq i64 %45, %24",
+  "br i1 %46, label %47, label %25, !llvm.loop !8",
+"",
+"47:                                               ; preds = %25",
+  "%48 = icmp eq i64 %23, 0",
+  "br i1 %48, label %90, label %49",
+"",
+"49:                                               ; preds = %47",
+  "%50 = icmp ult i64 %23, 8",
+  "br i1 %50, label %72, label %51",
+"",
+"51:                                               ; preds = %20, %49",
+  "%52 = phi i64 [ %24, %49 ], [ 0, %20 ]",
+  "%53 = and i64 %2, 7",
+  "%54 = sub nsw i64 %10, %53",
+  "%55 = getelementptr inbounds i8, ptr %0, i64 -7",
+  "br label %56",
+"",
+"56:                                               ; preds = %56, %51",
+  "%57 = phi i64 [ %52, %51 ], [ %68, %56 ]",
+  "%58 = xor i64 %57, -1",
+  "%59 = add i64 %2, %58",
+  "%60 = shl i64 %59, 32",
+  "%61 = ashr exact i64 %60, 32",
+  "%62 = getelementptr inbounds i8, ptr %55, i64 %61",
+  "%63 = bitcast ptr %62 to <8 x i8>*",
+  "%64 = load <8 x i8>, <8 x i8>* %63, align 1, !tbaa !5",
+  "%65 = shufflevector <8 x i8> %64, <8 x i8> poison, <8 x i32> <i32 7, i32 6, i32 5, i32 4, i32 3, i32 2, i32 1, i32 0>",
+  "%66 = getelementptr inbounds i8, ptr %7, i64 %57",
+  "%67 = bitcast ptr %66 to <8 x i8>*",
+  "store <8 x i8> %65, <8 x i8>* %67, align 1, !tbaa !5",
+  "%68 = add nuw i64 %57, 8",
+  "%69 = icmp eq i64 %68, %54",
+  "br i1 %69, label %70, label %56, !llvm.loop !11",
+"",
+"70:                                               ; preds = %56",
+  "%71 = icmp eq i64 %53, 0",
+  "br i1 %71, label %90, label %72",
+"",
+"72:                                               ; preds = %12, %9, %49, %70",
+  "%73 = phi i64 [ 0, %9 ], [ 0, %12 ], [ %24, %49 ], [ %54, %70 ]",
+  "%74 = sub i64 %2, %73",
+  "%75 = add nsw i64 %73, 1",
+  "%76 = and i64 %74, 1",
+  "%77 = icmp eq i64 %76, 0",
+  "br i1 %77, label %87, label %78",
+"",
+"78:                                               ; preds = %72",
+  "%79 = xor i64 %73, -1",
+  "%80 = add i64 %2, %79",
+  "%81 = shl i64 %80, 32",
+  "%82 = ashr exact i64 %81, 32",
+  "%83 = getelementptr inbounds i8, ptr %0, i64 %82",
+  "%84 = load i8, ptr %83, align 1, !tbaa !5",
+  "%85 = getelementptr inbounds i8, ptr %7, i64 %73",
+  "store i8 %84, ptr %85, align 1, !tbaa !5",
+  "%86 = add nuw nsw i64 %73, 1",
+  "br label %87",
+"",
+"87:                                               ; preds = %78, %72",
+  "%88 = phi i64 [ %73, %72 ], [ %86, %78 ]",
+  "%89 = icmp eq i64 %10, %75",
+  "br i1 %89, label %90, label %93",
+"",
+"90:                                               ; preds = %87, %93, %47, %70, %1",
+  "%91 = ashr exact i64 %4, 32",
+  "%92 = getelementptr inbounds i8, ptr %7, i64 %91",
+  "store i8 0, ptr %92, align 1, !tbaa !5",
+  "ret ptr %7",
+"",
+"93:                                               ; preds = %87, %93",
+  "%94 = phi i64 [ %110, %93 ], [ %88, %87 ]",
+  "%95 = xor i64 %94, -1",
+  "%96 = add i64 %2, %95",
+  "%97 = shl i64 %96, 32",
+  "%98 = ashr exact i64 %97, 32",
+  "%99 = getelementptr inbounds i8, ptr %0, i64 %98",
+  "%100 = load i8, ptr %99, align 1, !tbaa !5",
+  "%101 = getelementptr inbounds i8, ptr %7, i64 %94",
+  "store i8 %100, ptr %101, align 1, !tbaa !5",
+  "%102 = add nuw nsw i64 %94, 1",
+  "%103 = sub i64 4294967294, %94",
+  "%104 = add i64 %2, %103",
+  "%105 = shl i64 %104, 32",
+  "%106 = ashr exact i64 %105, 32",
+  "%107 = getelementptr inbounds i8, ptr %0, i64 %106",
+  "%108 = load i8, ptr %107, align 1, !tbaa !5",
+  "%109 = getelementptr inbounds i8, ptr %7, i64 %102",
+  "store i8 %108, ptr %109, align 1, !tbaa !5",
+  "%110 = add nuw nsw i64 %94, 2",
+  "%111 = icmp eq i64 %110, %10",
+  "br i1 %111, label %90, label %93, !llvm.loop !13"
+    };
+
+    for(String line : lines)
+    {
+      outputFile.println(line);
+    }
+
+    outputFile.println("}");
+  }
+
+  /**
    * Output precompiled functions
    */
   private void emitFunctionDeclarations() {
     emitConcatDeclaration();
+    emitGetUserInputDeclaration();
+    emitReverseStringDeclaration();
   }
 
   /**
@@ -439,9 +728,27 @@ public class Compiler {
    */
   private void emitMetadata() {
     // used in Concat
-    outputFile.println("!5 = !{!6, !6, i64 0}");
-    outputFile.println("!6 = !{!\"omnipotent char\", !7, i64 0}");
-    outputFile.println("!7 = !{!\"Simple C/C++ TBAA\"}");
+    // these come straight from compiled and optimized llvm ir for helper functions - I have no clue what they do (I got tired of figuring it out)
+    String[] lines = {
+      "!0 = !{i32 1, !\"wchar_size\", i32 4}",
+      "!1 = !{i32 7, !\"PIC Level\", i32 2}",
+      "!2 = !{i32 7, !\"PIE Level\", i32 2}",
+      "!3 = !{i32 7, !\"uwtable\", i32 1}",
+      "!4 = !{!\"Ubuntu clang version 14.0.0-1ubuntu1.1\"}",
+      "!5 = !{!6, !6, i64 0}",
+      "!6 = !{!\"omnipotent char\", !7, i64 0}",
+      "!7 = !{!\"Simple C/C++ TBAA\"}",
+      "!8 = distinct !{!8, !9}",
+      "!9 = !{!\"llvm.loop.mustprogress\"}",
+      "!10 = !{!\"llvm.loop.isvectorized\", i32 1}",
+      "!11 = distinct !{!11, !9, !10, !12}",
+      "!12 = !{!\"llvm.loop.unroll.runtime.disable\"}",
+      "!13 = distinct !{!13, !9, !10}",
+    };
+    for(String line : lines)
+    {
+      outputFile.println(line);
+    }
   }
 
   /**
