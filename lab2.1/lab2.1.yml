@@ -1,0 +1,111 @@
+# SI413 Lab 2.1: Spec for StringBoolVar Language
+
+your_name: George Prielipp
+
+your_alpha: 265112
+
+used_ai: N # remember to turn in an aichat.md file as well
+
+# describe any collaboration or help you got from classmates
+collaboration: |
+    NONE
+
+# leave this as NONE for your initial submission
+changes_on_resubmit: |
+    NONE
+
+#### TASK 1 ####
+
+language_name: mashup
+
+
+#### TASK 2 ####
+
+example_program: |
+    # gets the user input #
+    s.name = ?;
+
+    # see if they have a good name #
+    ['Your name makes me ' + (s.name == 'George')];
+
+    # see if a string is greater than mine #
+    ['Your string is ' + (? > '2026') + ' greater than my string'];
+
+    # print out the not of some boolean: expect ':)' #
+    # pythonic: print(not (True and False or False))#
+    [d(:) & :( | :()];
+
+example_input_1: |
+    George
+    2025
+
+example_output_1: |
+    Your name makes me :)
+    Your string is :( greater than my string
+    :)
+
+example_input_2: |
+    Army
+    2027
+
+example_output_2: |
+    Your name makes me :(
+    Your string is :) greather than my string
+    :)
+
+
+#### TASK 3 ####
+
+# there are just two example tokens below; you should remove or modify them!!
+tokens: |
+    Token name    Regex
+    ----------    -----
+    ASSIGN        <--
+    LT            <
+    GT            >
+    LTE           <=
+    GTE           >=
+    EQ            ==
+    BOOL_LIT      :\) | :\(
+    NOT           d
+    AND           &
+    OR            \|
+    IDENTIFIER    [bs]\.[a-zA-Z_$][a-zA-Z_$0-9]*
+    INT           [0-9]+
+    INPUT         \?
+    STR_LIT       "([^'"]|[\'\"])*" | '([^'"]|[\'\"])*'
+    --            #.*?#
+    --            [ \t\n]
+    
+
+#### TASK 4 ####
+
+# remove or replace the example production rule with your own!
+grammar: |
+    prog    --> stmt prog | epsilon
+    stmt    --> print; | expr;
+    expr    --> str | bool
+    str     --> expr + expr | (expr) | rstr | STR_LIT | INPUT | var
+    print   --> [expr]
+    op      --> LT | GT | LTE | GTE | EQ
+    bool    --> (bool) | BOOL_LIT | str op str | NOT bool | bool AND bool | bool OR bool | var 
+    var     --> IDENTIFIER
+    assign  --> var ASSIGN expr
+
+
+#### TASK 5 ####
+
+semantics: |
+    All of the boolean operators return booleans, and can be chained.
+
+
+#### TASK 6 ####
+
+reviewer_for: Nate Schmidt
+
+reviewed_by: Nate Schmidt
+
+review_passed: N
+
+reviewer_comments: |
+    BLAH BLAH BLAH
