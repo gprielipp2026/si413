@@ -97,6 +97,9 @@ grammar: |
 #### TASK 5 ####
 
 semantics: |
+    A program is a list of statements separated by semi-colons.
+    Print statements are expressions inside of brackets [].
+    Any expression can be reordered using parenthesis.
     Any expression can be reordered explicitely with surrounding parenthesis.
     All of the boolean operators return booleans, and can be chained.
     Strings have comparison operators that return booleans.
