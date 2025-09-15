@@ -107,7 +107,7 @@ semantics: |
     Boolean values will be printed as :) and :(.
     Variables are defined as a type (s for string, b for bool) followed by .identifier. 
     An identifier is an _, $, or any english character followed by any number of _, $, english characters, or digits (0-9).
-    Assignment looks like a variable declaration (s .identifier) followed by the assignment operator (=) and an expression that evaluates to the same type specified by the variable.
+    Assignment looks like a variable declaration (s .identifier) followed by the assignment operator (<--) and an expression that evaluates to the same type specified by the variable.
     Reassignment looks like the identifier followed by an assignment.
 
 #### TASK 6 ####
