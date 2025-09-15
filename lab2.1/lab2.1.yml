@@ -61,6 +61,11 @@ tokens: |
     Token name    Regex
     ----------    -----
     ASSIGN        <--
+    END           ;
+    LBRACK        [
+    RBRACK        ]
+    LPAREN        (
+    RPAREN        )
     LT            <
     GT            >
     LTE           <=
@@ -71,10 +76,10 @@ tokens: |
     AND           &
     OR            \|
     TYPE          [bs]
-    IDENTIFIER    \.[a-zA-Z_$][a-zA-Z_$0-9]*
+    IDENTIFIER    \.[a-zA-Z_$][a-zA-Z_$0-9]*?
     INT           [0-9]+
     INPUT         \?
-    STR_LIT       "([^\'\"]|[\'\"])*" | '([^\'\"]|[\'\"])*'
+    STR_LIT       "([^\'\"]|[\'\"])*?" | '([^\'\"]|[\'\"])*?'
     --            #.*?#
     --            [ \t\n]
     
