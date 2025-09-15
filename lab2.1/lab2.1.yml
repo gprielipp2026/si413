@@ -85,11 +85,11 @@ tokens: |
 grammar: |
     prog    --> stmt prog | epsilon
     stmt    --> print; | expr;
-    expr    --> str | bool
-    str     --> expr + expr | (expr) | rstr | STR_LIT | INPUT | var
+    expr    --> str | bool | (expr)
+    str     --> expr + expr | rstr | STR_LIT | INPUT | var
     print   --> [expr]
     op      --> LT | GT | LTE | GTE | EQ
-    bool    --> (bool) | BOOL_LIT | str op str | NOT bool | bool AND bool | bool OR bool | var 
+    bool    --> BOOL_LIT | str op str | NOT bool | bool AND bool | bool OR bool | var 
     var     --> TYPE IDENTIFIER
     assign  --> var ASSIGN expr
 
