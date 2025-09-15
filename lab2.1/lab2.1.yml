@@ -84,7 +84,7 @@ tokens: |
 # remove or replace the example production rule with your own!
 grammar: |
     prog    --> stmt prog | epsilon
-    stmt    --> print; | expr;
+    stmt    --> print; | expr; | assign;
     expr    --> str | bool | (expr)
     str     --> expr + expr | rstr | STR_LIT | INPUT | var
     print   --> [expr]
