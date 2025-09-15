@@ -23,7 +23,7 @@ language_name: mashup
 
 example_program: |
     # gets the user input #
-    s.name = ?;
+    s.name <-- ?;
 
     # see if they have a good name #
     ['Your name makes me ' + (s.name == 'George')];
