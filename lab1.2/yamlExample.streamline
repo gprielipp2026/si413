@@ -3,6 +3,6 @@ d*([What is your name?])*b
 -> tell them hi (read in their name)
 d*([Hello ]~[___])*b
 -> reverse a string as a farewell
-d*(]Goodbye.[)*b
+d*(][Goodbye.][)*b
 -> output a special phrase
 d*([3 $$ and 3 $_: ]~[$$$$___])*b

@@ -23,11 +23,11 @@ d*([Enter your name:])*b
 d*([Hello ]~[___])*b
 
 -> test reverse strings
-d*(]reversed[)*b
+d*(][reversed][)*b
 d*([Enter your name:])*b
-d*(]___[~]Hello: [)*b
+d*(][___][~][Hello: ][)*b
 
 -> I need more specification on program behavior for this
 d*([Hello ___])*b
-d*(]Your name is ___[)*b
+d*(][Your name is ___][)*b
 
