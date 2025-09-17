@@ -67,10 +67,24 @@ public interface ParseRulesVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVarExpr(ParseRules.VarExprContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code Grouping}
+	 * labeled alternative in {@link ParseRules#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGrouping(ParseRules.GroupingContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code AddExpr}
 	 * labeled alternative in {@link ParseRules#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAddExpr(ParseRules.AddExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ExpExpr}
+	 * labeled alternative in {@link ParseRules#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpExpr(ParseRules.ExpExprContext ctx);
 }

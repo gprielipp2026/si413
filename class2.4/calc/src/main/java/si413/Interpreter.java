@@ -3,7 +3,8 @@ package si413;
 import java.nio.file.Path;
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import org.antlr.v4.runtime.TokenStream;
@@ -36,7 +37,10 @@ public class Interpreter {
 
         @Override
         public Void visitSaveStmt(ParseRules.SaveStmtContext ctx) {
-            savedValue = evisitor.visit(ctx.expr());
+            // savedValue = evisitor.visit(ctx.expr());
+            String var = ctx.VAR().getText();
+            Integer value = evisitor.visit(ctx.expr());
+            varMap.put(var, value);
             return null;
         }
     }
@@ -51,10 +55,11 @@ public class Interpreter {
 
         @Override
         public Integer visitVarExpr(ParseRules.VarExprContext ctx) {
-            if (savedValue == null) {
+            String var = ctx.VAR().getText();
+            if (!varMap.containsKey(var)) {
                 throw new RuntimeException("x was never set with a save() operation");
             }
-            return savedValue;
+            return varMap.get(var);
         }
 
         @Override
@@ -79,9 +84,37 @@ public class Interpreter {
             if (ctx.ADDOP().getText().equals("+")) return lhs + rhs;
             else return lhs - rhs;
         }
+
+        @Override
+        public Integer visitGrouping(ParseRules.GroupingContext ctx) {
+            return visit(ctx.expr());
+        }
+
+        /**
+         * fast exponentiation
+         */
+        private Integer pow(Integer base, Integer pow) {
+            if(pow < 0) {
+                return pow(1 / base, -pow);
+            }
+            else if(pow == 0) return 1;
+            else {
+                if(pow % 2 == 0) return pow(base * base, pow / 2);
+                else return base * pow(base * base, (pow - 1) / 2);
+            }
+
+        }
+
+        @Override
+        public Integer visitExpExpr(ParseRules.ExpExprContext ctx) {
+            int lhs = visit(ctx.expr(0));
+            int rhs = visit(ctx.expr(1));
+            return this.pow(lhs, rhs);
+        }
     }
 
     private Integer savedValue = null;
+    private Map<String, Integer> varMap = new HashMap<>();
     private Scanner stdin = new Scanner(System.in);
     private StatementVisitor svisitor = new StatementVisitor();
     private ExpressionVisitor evisitor = new ExpressionVisitor();

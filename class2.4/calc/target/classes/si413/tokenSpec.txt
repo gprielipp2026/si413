@@ -1,9 +1,11 @@
 # tokens for basic calculator language
-PRINT: print
-SAVE: save
-X: x
+PRINT: print|!
+SAVE: save|\$
+SEP: ,
+VAR: [a-zA-Z]+
 LP: \(
 RP: \)
+EXP: \^
 ADDOP: [-+]
 MULOP: [*/]
 INT: [0-9]+

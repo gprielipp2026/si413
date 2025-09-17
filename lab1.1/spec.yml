@@ -63,15 +63,14 @@ example_output_2: |
 # Task 3
 
 language_syntax: |
-    PROGRAM --> PROGRAM EXPRESSION | epsilon
-    EXPRESSION --> PRINT; | STATEMENT; | COMMENT
-    STATEMENT --> STRING
-    STRING --> STRING + STRING | (STRING) | rSTRING | STRING_LITERAL | INPUT
-    STRING_LITERAL --> "CHARACTER*" | 'CHARACTER*'
-    CHARACTER --> [:ascii:] | \' | \"
+    program --> program statement | epsilon
+    statement --> print; | expression; | COMMENT
+    expression --> string
+    string --> string + string | (string) | rstring | STRING_LITERAL | INPUT
+    print --> [expression]
     INPUT --> ?
-    PRINT --> [STATEMENT]
-    COMMENT --> #[:ascii:]*#
+    STRING_LITERAL --> "([^'"]|[\'\"])*" | '([^'"]|[\'\"])*'
+    (ignore) COMMENT --> #.*?#
     
 
 language_semantics: |

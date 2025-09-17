@@ -104,6 +104,18 @@ public interface ParseRulesListener extends ParseTreeListener {
 	 */
 	void exitVarExpr(ParseRules.VarExprContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code Grouping}
+	 * labeled alternative in {@link ParseRules#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterGrouping(ParseRules.GroupingContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Grouping}
+	 * labeled alternative in {@link ParseRules#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitGrouping(ParseRules.GroupingContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code AddExpr}
 	 * labeled alternative in {@link ParseRules#expr}.
 	 * @param ctx the parse tree
@@ -115,4 +127,16 @@ public interface ParseRulesListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAddExpr(ParseRules.AddExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ExpExpr}
+	 * labeled alternative in {@link ParseRules#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpExpr(ParseRules.ExpExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ExpExpr}
+	 * labeled alternative in {@link ParseRules#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpExpr(ParseRules.ExpExprContext ctx);
 }

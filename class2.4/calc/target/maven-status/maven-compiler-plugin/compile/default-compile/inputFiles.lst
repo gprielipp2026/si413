@@ -1,8 +1,8 @@
-/home/gprielipp/si413/class2.4/calc/target/generated-sources/antlr4/si413/ParseRules.java
-/home/gprielipp/si413/class2.4/calc/target/generated-sources/antlr4/si413/ParseRulesBaseVisitor.java
-/home/gprielipp/si413/class2.4/calc/src/main/java/si413/Errors.java
-/home/gprielipp/si413/class2.4/calc/target/generated-sources/antlr4/si413/ParseRulesListener.java
-/home/gprielipp/si413/class2.4/calc/src/main/java/si413/Interpreter.java
-/home/gprielipp/si413/class2.4/calc/target/generated-sources/antlr4/si413/ParseRulesBaseListener.java
-/home/gprielipp/si413/class2.4/calc/src/main/java/si413/Tokenizer.java
-/home/gprielipp/si413/class2.4/calc/target/generated-sources/antlr4/si413/ParseRulesVisitor.java
+/home/mids/m265112/si413/class2.4/calc/target/generated-sources/antlr4/si413/ParseRules.java
+/home/mids/m265112/si413/class2.4/calc/src/main/java/si413/Errors.java
+/home/mids/m265112/si413/class2.4/calc/target/generated-sources/antlr4/si413/ParseRulesListener.java
+/home/mids/m265112/si413/class2.4/calc/src/main/java/si413/Tokenizer.java
+/home/mids/m265112/si413/class2.4/calc/target/generated-sources/antlr4/si413/ParseRulesBaseVisitor.java
+/home/mids/m265112/si413/class2.4/calc/target/generated-sources/antlr4/si413/ParseRulesVisitor.java
+/home/mids/m265112/si413/class2.4/calc/target/generated-sources/antlr4/si413/ParseRulesBaseListener.java
+/home/mids/m265112/si413/class2.4/calc/src/main/java/si413/Interpreter.java
