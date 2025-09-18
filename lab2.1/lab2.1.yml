@@ -66,11 +66,8 @@ tokens: |
     RBRACK        ]
     LPAREN        (
     RPAREN        )
-    LT            <
-    GT            >
-    LTE           <=
-    GTE           >=
-    EQ            ==
+    CONCAT        \+
+    OP            <|>|<=|>=|==
     BOOL_LIT      :\) | :\(
     NOT           d
     AND           &
@@ -89,12 +86,11 @@ tokens: |
 # remove or replace the example production rule with your own!
 grammar: |
     prog    --> stmt prog | epsilon
-    stmt    --> print; | expr; | assign;
-    expr    --> str | bool | (expr)
-    str     --> expr + expr | rstr | STR_LIT | INPUT | var
-    print   --> [expr]
-    op      --> LT | GT | LTE | GTE | EQ
-    bool    --> BOOL_LIT | str op str | NOT bool | bool AND bool | bool OR bool | var 
+    stmt    --> print END | expr END | assign END
+    expr    --> str | bool | LPAREN expr RPAREN
+    str     --> expr CONCAT expr | rstr | STR_LIT | INPUT | var
+    print   --> LBRACK expr RBRACK
+    bool    --> BOOL_LIT | str OP str | NOT bool | bool AND bool | bool OR bool | var 
     var     --> TYPE IDENTIFIER
     assign  --> var ASSIGN expr
 
