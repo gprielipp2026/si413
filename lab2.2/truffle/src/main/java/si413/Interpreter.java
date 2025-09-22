@@ -155,6 +155,10 @@ public class Interpreter {
               BoolValue bval = (BoolValue)value;
               return new BoolValue(bval.negate()); 
             }
+            else
+            {
+              throw new RuntimeException("error in the interpreter - should not reach this line");
+            }
 
 
         }
