@@ -113,7 +113,7 @@ public class Interpreter {
                 return new StrValue(left + right);
             }
 
-            Errors.error("String comparison operations do not include '" + op + "'");
+            return Errors.error("String comparison operations do not include '" + op + "'");
         }
 
         private BoolValue binOpBool(Value lhs, Value rhs, String op)
@@ -130,7 +130,7 @@ public class Interpreter {
                 return new BoolValue(left || right);
             }
 
-            Errors.error("Boolean logic operations do not include '" + op + "'");
+            return Errors.error("Boolean logic operations do not include '" + op + "'");
         }
 
         @Override
@@ -140,7 +140,7 @@ public class Interpreter {
             String op = ctx.OP().getText();
 
             // check types:
-            if(lhs.getType() != rhs.getType()) Errors.error("Trying to perform an operation on two different types");
+            if(lhs.getType() != rhs.getType()) return Errors.error("Trying to perform an operation on two different types");
             else if(lhs.getType() == Value.Type.string) return binOpStr(lhs, rhs, op);
             else if(lhs.getType() == Value.Type.bool) return binOpBool(lhs, rhs, op);
 
@@ -168,7 +168,7 @@ public class Interpreter {
             }
             else
             {
-              Errors.error("error in the interpreter - should not reach this line");
+              return Errors.error("error in the interpreter - should not reach this line");
             }
 
 
@@ -181,7 +181,7 @@ public class Interpreter {
             return varMap.get(id);
           }
 
-          Errors.error(id + " has not been declared yet.");
+          return Errors.error(id + " has not been declared yet.");
         }
     }
 
