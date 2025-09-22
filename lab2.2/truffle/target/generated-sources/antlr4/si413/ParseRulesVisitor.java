@@ -39,6 +39,13 @@ public interface ParseRulesVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssignStmt(ParseRules.AssignStmtContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code RevExpr}
+	 * labeled alternative in {@link ParseRules#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRevExpr(ParseRules.RevExprContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code BoolExpr}
 	 * labeled alternative in {@link ParseRules#expr}.
 	 * @param ctx the parse tree
@@ -66,13 +73,6 @@ public interface ParseRulesVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitVarExpr(ParseRules.VarExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code RevStrExpr}
-	 * labeled alternative in {@link ParseRules#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRevStrExpr(ParseRules.RevStrExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code BinaryOpExpr}
 	 * labeled alternative in {@link ParseRules#expr}.

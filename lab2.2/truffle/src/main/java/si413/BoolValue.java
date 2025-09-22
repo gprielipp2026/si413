@@ -8,4 +8,5 @@ public class BoolValue implements Value {
 
     public Value.Type getType() { return Value.Type.bool; }
     public Boolean getValue() { return value; }
+    public Boolean negate() { return !value; }
 }

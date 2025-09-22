@@ -18,6 +18,6 @@ expr
   | BOOL #BoolExpr
   | expr OP expr #BinaryOpExpr
   | INPUT #InputExpr
-  | REV TILDE expr TILDE #RevStrExpr
+  | REV TILDE expr TILDE #RevExpr
   | ID #VarExpr
   ;

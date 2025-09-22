@@ -65,6 +65,18 @@ public class ParseRulesBaseListener implements ParseRulesListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterRevExpr(ParseRules.RevExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRevExpr(ParseRules.RevExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBoolExpr(ParseRules.BoolExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -108,18 +120,6 @@ public class ParseRulesBaseListener implements ParseRulesListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitVarExpr(ParseRules.VarExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRevStrExpr(ParseRules.RevStrExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRevStrExpr(ParseRules.RevStrExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -144,26 +144,29 @@ public class Interpreter {
         }
 
         @Override
-        public Value visitRevStrExpr(ParseRules.RevStrExprContext ctx) {
+        public Value visitRevExpr(ParseRules.RevExprContext ctx) {
             Value value = visit(ctx.expr());
 
-            if(value.getType() != Value.Type.string) {
-                throw new RuntimeException("Expected a string, instead got a " + value.getType().toString());
+            if(value.getType() == Value.Type.string) {
+              String rev = new StringBuilder(value.getValue().toString()).reverse().toString();
+              return new StrValue(rev);
+            }
+            else if(value.getType() == Value.Type.bool) {
+              BoolValue bval = (BoolValue)value;
+              return bval.negate(); 
             }
 
-            String rev = new StringBuilder(value.getValue().toString()).reverse().toString();
-            
-            return new StrValue(rev);
+
         }
 
         @Override
         public Value visitVarExpr(ParseRules.VarExprContext ctx) {
-            String id = ctx.ID().getText();
-            if(varMap.containsKey(id)) {
-                return varMap.get(id);
-            }
+          String id = ctx.ID().getText();
+          if(varMap.containsKey(id)) {
+            return varMap.get(id);
+          }
 
-            throw new RuntimeException(id + " has not been declared yet.");
+          throw new RuntimeException(id + " has not been declared yet.");
         }
     }
 
@@ -175,33 +178,33 @@ public class Interpreter {
     private Map<String, Value> varMap = new HashMap<>();
 
     public Interpreter() throws IOException {
-        this.tokenizer = new Tokenizer(
-            getClass().getResourceAsStream("tokenSpec.txt"),
-            ParseRules.VOCABULARY
-        );
+      this.tokenizer = new Tokenizer(
+          getClass().getResourceAsStream("tokenSpec.txt"),
+          ParseRules.VOCABULARY
+          );
     }
 
     public ParseRules.ProgContext parse(Path sourceFile) throws IOException {
-        TokenStream tokenStream = tokenizer.streamFrom(sourceFile);
-        ParseRules parser = new ParseRules(tokenStream);
-        Errors.register(parser);
-        return parser.prog();
+      TokenStream tokenStream = tokenizer.streamFrom(sourceFile);
+      ParseRules parser = new ParseRules(tokenStream);
+      Errors.register(parser);
+      return parser.prog();
     }
 
     public void execute(ParseRules.ProgContext parseTree) {
-        // to execute the whole program, we just call visit() on the  root
-        // node of the parse tree!
-        svisitor.visit(parseTree);
+      // to execute the whole program, we just call visit() on the  root
+      // node of the parse tree!
+      svisitor.visit(parseTree);
     }
 
     public static void main(String[] args) throws IOException {
-        if (args.length != 1) {
-            System.err.println("ERROR: need 1 command-line arg, input source file");
-            System.exit(1);
-        }
-        Path sourceFile = Path.of(args[0]);
-        Interpreter interp = new Interpreter();
-        ParseRules.ProgContext parseTree = interp.parse(sourceFile);
-        interp.execute(parseTree);
+      if (args.length != 1) {
+        System.err.println("ERROR: need 1 command-line arg, input source file");
+        System.exit(1);
+      }
+      Path sourceFile = Path.of(args[0]);
+      Interpreter interp = new Interpreter();
+      ParseRules.ProgContext parseTree = interp.parse(sourceFile);
+      interp.execute(parseTree);
     }
 }

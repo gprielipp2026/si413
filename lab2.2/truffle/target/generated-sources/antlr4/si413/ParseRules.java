@@ -298,6 +298,31 @@ public class ParseRules extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
+	public static class RevExprContext extends ExprContext {
+		public TerminalNode REV() { return getToken(ParseRules.REV, 0); }
+		public List<TerminalNode> TILDE() { return getTokens(ParseRules.TILDE); }
+		public TerminalNode TILDE(int i) {
+			return getToken(ParseRules.TILDE, i);
+		}
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
+		}
+		public RevExprContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ParseRulesListener ) ((ParseRulesListener)listener).enterRevExpr(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ParseRulesListener ) ((ParseRulesListener)listener).exitRevExpr(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ParseRulesVisitor ) return ((ParseRulesVisitor<? extends T>)visitor).visitRevExpr(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class BoolExprContext extends ExprContext {
 		public TerminalNode BOOL() { return getToken(ParseRules.BOOL, 0); }
 		public BoolExprContext(ExprContext ctx) { copyFrom(ctx); }
@@ -366,31 +391,6 @@ public class ParseRules extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof ParseRulesVisitor ) return ((ParseRulesVisitor<? extends T>)visitor).visitVarExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class RevStrExprContext extends ExprContext {
-		public TerminalNode REV() { return getToken(ParseRules.REV, 0); }
-		public List<TerminalNode> TILDE() { return getTokens(ParseRules.TILDE); }
-		public TerminalNode TILDE(int i) {
-			return getToken(ParseRules.TILDE, i);
-		}
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public RevStrExprContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ParseRulesListener ) ((ParseRulesListener)listener).enterRevStrExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ParseRulesListener ) ((ParseRulesListener)listener).exitRevStrExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ParseRulesVisitor ) return ((ParseRulesVisitor<? extends T>)visitor).visitRevStrExpr(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -467,7 +467,7 @@ public class ParseRules extends Parser {
 				break;
 			case REV:
 				{
-				_localctx = new RevStrExprContext(_localctx);
+				_localctx = new RevExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(23);

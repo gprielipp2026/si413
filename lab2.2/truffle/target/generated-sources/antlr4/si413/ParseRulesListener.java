@@ -56,6 +56,18 @@ public interface ParseRulesListener extends ParseTreeListener {
 	 */
 	void exitAssignStmt(ParseRules.AssignStmtContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code RevExpr}
+	 * labeled alternative in {@link ParseRules#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterRevExpr(ParseRules.RevExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code RevExpr}
+	 * labeled alternative in {@link ParseRules#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitRevExpr(ParseRules.RevExprContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code BoolExpr}
 	 * labeled alternative in {@link ParseRules#expr}.
 	 * @param ctx the parse tree
@@ -103,18 +115,6 @@ public interface ParseRulesListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVarExpr(ParseRules.VarExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code RevStrExpr}
-	 * labeled alternative in {@link ParseRules#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterRevStrExpr(ParseRules.RevStrExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code RevStrExpr}
-	 * labeled alternative in {@link ParseRules#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitRevStrExpr(ParseRules.RevStrExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code BinaryOpExpr}
 	 * labeled alternative in {@link ParseRules#expr}.
