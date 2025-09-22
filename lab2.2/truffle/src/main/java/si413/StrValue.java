@@ -8,4 +8,5 @@ public class StrValue implements Value {
 
     public Value.Type getType() { return Value.Type.string; }
     public String getValue() { return value; }
+    public String toString() { return value; }
 }

@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import javax.management.RuntimeErrorException;
 
 import java.util.regex.Matcher;
+import java.util.regex.MatchResult;
 import org.antlr.v4.runtime.TokenStream;
 
 /** Interpreter for truffle language.
@@ -34,7 +35,7 @@ public class Interpreter {
         @Override
         public Void visitPrintStmt(ParseRules.PrintStmtContext ctx) {
             Value value = evisitor.visit(ctx.expr());
-            System.out.println(value.getValue());
+            System.out.println(value.toString());
             return null;
         }
 
@@ -55,17 +56,27 @@ public class Interpreter {
             String lit = ctx.LIT().getText();
 
             // have to extract the string literal
-            Matcher matcher = Pattern.compile("([^\\[\\]\\$])+|(\\$\\[|\\$\\]|\\$\\$)").matcher(lit);
+            // find all special characters
+            Matcher matcher = Pattern.compile("(\\$[\\[\\]])").matcher(lit);
 
+            String result = "";
+            int ind = 1; // remove the first '['
+
+            // removing the escape sequence for the special characters
             while(matcher.find()) {
-                for(int i = 0; i < matcher.groupCount(); i++)
-                {
-                    System.out.println(String.format("%d %s", i, matcher.group(i)));
-                }
-                System.out.println();
+                MatchResult match = matcher.toMatchResult();
+                int startind = match.start();
+                int nextind = match.end();
+                String seq = match.group(0);
+                result += lit.substring(ind, startind) + seq.substring(1);
+                ind = nextind;
             }
 
-            return new StrValue( "placeholder" );
+            // get the last bit of the string
+            // remove the last ']'
+            result += lit.substring(ind, lit.length()-1);
+
+            return new StrValue( result );
         }
 
         @Override
@@ -87,13 +98,13 @@ public class Interpreter {
             {
                 String left = lhs.getValue().toString();
                 String right = rhs.getValue().toString();
-                return new BoolValue(right.contains(left));
+                return new BoolValue(left.length() > right.length());
             }
             else if(op.equals("?"))
             {
                 String left = lhs.getValue().toString();
                 String right = rhs.getValue().toString();
-                return new BoolValue(left.length() > right.length());
+                return new BoolValue(right.contains(left));
             }
             else if(op.equals("+"))
             {
@@ -102,7 +113,7 @@ public class Interpreter {
                 return new StrValue(left + right);
             }
 
-            throw new RuntimeException("String comparison operations do not include '" + op + "'");
+            Errors.error("String comparison operations do not include '" + op + "'");
         }
 
         private BoolValue binOpBool(Value lhs, Value rhs, String op)
@@ -119,7 +130,7 @@ public class Interpreter {
                 return new BoolValue(left || right);
             }
 
-            throw new RuntimeException("Boolean logic operations do not include '" + op + "'");
+            Errors.error("Boolean logic operations do not include '" + op + "'");
         }
 
         @Override
@@ -129,7 +140,7 @@ public class Interpreter {
             String op = ctx.OP().getText();
 
             // check types:
-            if(lhs.getType() != rhs.getType()) throw new RuntimeException("Trying to perform an operation on two different types");
+            if(lhs.getType() != rhs.getType()) Errors.error("Trying to perform an operation on two different types");
             else if(lhs.getType() == Value.Type.string) return binOpStr(lhs, rhs, op);
             else if(lhs.getType() == Value.Type.bool) return binOpBool(lhs, rhs, op);
 
@@ -157,7 +168,7 @@ public class Interpreter {
             }
             else
             {
-              throw new RuntimeException("error in the interpreter - should not reach this line");
+              Errors.error("error in the interpreter - should not reach this line");
             }
 
 
@@ -170,7 +181,7 @@ public class Interpreter {
             return varMap.get(id);
           }
 
-          throw new RuntimeException(id + " has not been declared yet.");
+          Errors.error(id + " has not been declared yet.");
         }
     }
 

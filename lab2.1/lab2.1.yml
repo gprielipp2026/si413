@@ -69,6 +69,7 @@ tokens: |
     CONCAT        \+
     OP            <|>|<=|>=|==
     BOOL_LIT      :\) | :\(
+    REV           r
     NOT           d
     AND           &
     OR            \|
@@ -88,7 +89,7 @@ grammar: |
     prog    --> stmt prog | epsilon
     stmt    --> print END | expr END | assign END
     expr    --> str | bool | LPAREN expr RPAREN
-    str     --> expr CONCAT expr | rstr | STR_LIT | INPUT | var
+    str     --> expr CONCAT expr | REV str | STR_LIT | INPUT | var
     print   --> LBRACK expr RBRACK
     bool    --> BOOL_LIT | str OP str | NOT bool | bool AND bool | bool OR bool | var 
     var     --> TYPE IDENTIFIER

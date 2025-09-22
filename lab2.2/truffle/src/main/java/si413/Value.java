@@ -5,4 +5,5 @@ public interface Value {
     
     Type getType();
     Object getValue();
+    String toString();
 } 

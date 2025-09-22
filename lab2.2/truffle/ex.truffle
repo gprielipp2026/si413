@@ -25,3 +25,6 @@ p r~r~r~strb~~~
 
 p i<i&b
 p r~[dne ]+i+r~[cba ]~~
+
+p [expect 1]
+p r~0~
