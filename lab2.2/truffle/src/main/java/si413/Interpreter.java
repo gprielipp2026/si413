@@ -153,7 +153,7 @@ public class Interpreter {
             }
             else if(value.getType() == Value.Type.bool) {
               BoolValue bval = (BoolValue)value;
-              return bval.negate(); 
+              return new BoolValue(bval.negate()); 
             }
 
 
