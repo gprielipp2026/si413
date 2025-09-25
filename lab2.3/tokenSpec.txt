@@ -1,0 +1,13 @@
+# tokens for basic truffle language
+TILDE: ~
+OP: <|>|\?|\+|&|\|
+BOOL: 0|1
+PRINT: p\s
+INPUT: i
+REV: r
+#RBRACK: \[
+#LBRACK: \]
+LIT: \[([^\[\]\$]|\$\[|\$\]|\$\$)*\]
+ID: [a-z]+
+ignore: @.*?$
+ignore: [ \n\t]

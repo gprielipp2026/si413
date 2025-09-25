@@ -1,0 +1,29 @@
+@ step 1: run an empty prog
+
+@ step 2: try printing a string literal
+p [Hello world!]
+
+@ step 3: try out concat
+p [Hello]+[ world!]
+
+@ step 4: try out bools
+p 0
+p 1
+
+@ step 5: try out larger boolean expressions (and variables):
+str~[bye]
+strb~[hello]
+p [strings]
+p str<strb
+p str?strb
+p [ello]?strb
+
+@ step 6: try rev string & not
+str~[this is ]
+p [$[hi$] ]+str+r~[.!]~
+p r~r~r~strb~~~
+p [expect 1]
+p r~0~
+
+@ step 7: get input workign
+p [Hello ]+i
