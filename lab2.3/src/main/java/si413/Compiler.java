@@ -44,6 +44,30 @@ public class Compiler {
         return res;
     }
 
+    private String or(String reg1, String reg2) {
+        String res = addReg("bool");
+
+        dest.println( String.format("\t%s = or i1 %s, %s", res, reg1, reg2) );
+
+        return res;
+    }
+
+    private String and(String reg1, String reg2) {
+        String res = addReg("bool");
+
+        dest.println( String.format("\t%s = and i1 %s, %s", res, reg1, reg2) );
+
+        return res;
+    }
+
+    private String input() {
+        String reg = addReg("str");
+
+        dest.println( String.format("\t%s = call ptr @getinput()", reg) );
+
+        return reg;
+    }
+
     private String addStrLit(String lit) { 
         int size = strlits.size();
         strlits.add(lit);
@@ -192,6 +216,10 @@ public class Compiler {
 
         private String binOpBool(String lhs, String rhs, String op)
         {
+            if(op.equals("&")) return and(lhs, rhs);
+            else if(op.equals("|")) return or(lhs, rhs);
+
+            Errors.error("Unknown boolean operation '" + op + "'");
             return null;
         }
 

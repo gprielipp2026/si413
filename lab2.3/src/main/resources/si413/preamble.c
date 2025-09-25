@@ -7,6 +7,12 @@ char* bool_to_str(bool b) {
   return (b ? "1":"0");
 }
 
+char* getinput() {
+  char* str = malloc(sizeof(char) * 1024); // very large string (hopefully)
+  scanf("%[^\n]\n", str);
+  return str;
+}
+
 bool not(bool b) {
   return !b;
 }

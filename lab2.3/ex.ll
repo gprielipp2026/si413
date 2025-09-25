@@ -433,3 +433,67 @@ attributes #6 = { nounwind readonly willreturn }
 !9 = distinct !{!9, !7}
 !10 = distinct !{!10, !7}
 !11 = distinct !{!11, !7}
+
+define i32 @main() {
+	call i32 @puts(ptr @lit0)
+	%bool0 = add i1 0, 0
+	%bool1 = add i1 1, 0
+	call i32 @puts(ptr @lit1)
+	%bool2 = and i1 %bool0, %bool1
+	%str3 = call ptr @bool_to_str(i1 %bool2)
+	call i32 @puts(ptr %str3)
+	%bool4 = or i1 %bool0, %bool1
+	%str5 = call ptr @bool_to_str(i1 %bool4)
+	call i32 @puts(ptr %str5)
+	call i32 @puts(ptr @lit4)
+	%bool6 = call i1 @str_lt(ptr @lit2, ptr @lit3)
+	%str7 = call ptr @bool_to_str(i1 %bool6)
+	call i32 @puts(ptr %str7)
+	%bool8 = call i1 @substr(ptr @lit2, ptr @lit3)
+	%str9 = call ptr @bool_to_str(i1 %bool8)
+	call i32 @puts(ptr %str9)
+	%bool10 = call i1 @substr(ptr @lit5, ptr @lit3)
+	%str11 = call ptr @bool_to_str(i1 %bool10)
+	call i32 @puts(ptr %str11)
+	%str12 = call ptr @getinput()
+	%str13 = call ptr @concat(ptr @lit6, ptr %str12)
+	%str14 = call ptr @concat(ptr @lit7, ptr %str13)
+	%str15 = call ptr @reverse_string(ptr @lit8)
+	%str16 = call ptr @concat(ptr %str14, ptr %str15)
+	call i32 @puts(ptr %str16)
+	%str17 = call ptr @reverse_string(ptr @lit3)
+	%str18 = call ptr @reverse_string(ptr %str17)
+	%str19 = call ptr @reverse_string(ptr %str18)
+	call i32 @puts(ptr %str19)
+	%str20 = call ptr @getinput()
+	%str21 = call ptr @getinput()
+	%bool22 = call i1 @str_lt(ptr %str20, ptr %str21)
+	%bool23 = and i1 %bool22, %bool1
+	%str24 = call ptr @bool_to_str(i1 %bool23)
+	call i32 @puts(ptr %str24)
+	%str25 = call ptr @getinput()
+	%str26 = call ptr @concat(ptr @lit9, ptr %str25)
+	%str27 = call ptr @reverse_string(ptr @lit10)
+	%str28 = call ptr @concat(ptr %str26, ptr %str27)
+	%str29 = call ptr @reverse_string(ptr %str28)
+	call i32 @puts(ptr %str29)
+	call i32 @puts(ptr @lit11)
+	%bool30 = add i1 0, 0
+	%bool31 = call i1 @not(i1 %bool30)
+	%str32 = call ptr @bool_to_str(i1 %bool31)
+	call i32 @puts(ptr %str32)
+  ret i32 0
+}
+
+@lit0 = constant [8 x i8] c"welcome\00"
+@lit1 = constant [9 x i8] c"booleans\00"
+@lit2 = constant [4 x i8] c"bye\00"
+@lit3 = constant [6 x i8] c"hello\00"
+@lit4 = constant [8 x i8] c"strings\00"
+@lit5 = constant [5 x i8] c"ello\00"
+@lit6 = constant [9 x i8] c"this is \00"
+@lit7 = constant [6 x i8] c"[hi] \00"
+@lit8 = constant [3 x i8] c".!\00"
+@lit9 = constant [5 x i8] c"dne \00"
+@lit10 = constant [5 x i8] c"cba \00"
+@lit11 = constant [9 x i8] c"expect 1\00"
