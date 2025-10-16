@@ -1,0 +1,95 @@
+# SI413 Lab 3.1: Spec and interpreter for iffy language
+
+your_name: George Prielipp
+
+your_alpha: 265112
+
+used_ai: N # remember to turn in an aichat.md file as well
+
+# leave this as NONE for your initial submission
+changes_on_resubmit: |
+    NONE
+
+# describe any collaboration or help you got from classmates
+collaboration: |
+    NONE
+
+# come up with an original name for your new langauge - extending truffle
+language_name: choco
+
+# explain a little what inspired your language and why it's cool
+language_explanation: |
+    Truffle chocolates are named after truffle mushrooms because they look similar. But that is where it stops.
+    As such, since I am extending truffle, it will look like truffle, but they will be inherently different in their abilities.
+
+# this is the example program that you make up
+example_program: |
+    p [Enter your name:]
+    name ~ i
+    [Bill]:name ? p (name + [ is a good name])
+
+    p [Guess a color]
+    color ~ [red]
+    guess ~ i
+    while guess:color & color:guess do {
+        guess < color ? {
+            p [Your guess is less than the color]
+        } ; guess > color ? {
+            p [Your guess is greater than my color]
+        } 
+
+        r ~ (guess:color & color:guess) ~ ? guess~i
+    }
+    p [You guessed correct!]
+
+
+example_input_1: |
+    Bill
+    blue
+    red
+
+example_output_1: |
+    Enter your name:
+    Bill is a good name
+    Guess a color
+    Your guess is less than the color
+    You guessed correct!
+
+
+example_input_2: |
+    George
+    blue
+    green
+    yellow
+    red
+
+example_output_2: |
+    Enter your name:
+    Guess a color
+    Your guess is less than the color
+    Your guess is less than the color
+    Your guess is greater than the color
+    You guessed correct!
+
+
+# your implementation of the "dance" program in your language
+dance_program: |
+    p [enter two dance moves]
+    x ~ i + [m] + i
+    p [Let's do the ] + x
+    y ~ [mb]:x
+    x < [mambo] ? {
+        p r x
+        y ~ 0
+    }
+    p y
+    p [a]:x & r ~ y ~
+    timer~[]
+    while r ~ [...]:timer ~ do {
+        p [cha]
+        timer ~ timer + [.]
+    }
+
+# something else your instructor should know?
+any_other_comments_for_me: |
+    NONE

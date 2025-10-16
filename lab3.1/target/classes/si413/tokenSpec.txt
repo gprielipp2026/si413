@@ -1,0 +1,20 @@
+TILDE:        ~
+LB:           {
+RB:           }
+LP:           (
+RP:           )
+STROP:        \+
+OP:           &|\||:|<|>
+BOOL:         0|1
+PRINT:        p\s
+INPUT:        i
+REV:          r
+LIT:          \[([^\[\]\$]|\$\[|\$\]|\$\$)*\]
+IF:           \?
+THEN:         do
+ELSE:         ;
+LOOP:         while
+TYPE:         bool|str
+ID:           [a-z]+
+ignore:       @.*
+ignore:       [ \t\n]
