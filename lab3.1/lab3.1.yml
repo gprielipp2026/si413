@@ -25,12 +25,12 @@ language_explanation: |
 # this is the example program that you make up
 example_program: |
     p [Enter your name:]
-    name ~ i
+    str name ~ i
     [Bill]:name ? p (name + [ is a good name])
 
     p [Guess a color]
-    color ~ [red]
-    guess ~ i
+    str color ~ [red]
+    str guess ~ i
     while guess:color & color:guess do {
         guess < color ? {
             p [Your guess is less than the color]
@@ -75,19 +75,19 @@ example_output_2: |
 # your implementation of the "dance" program in your language
 dance_program: |
     p [enter two dance moves]
-    x ~ i + [m] + i
+    str x ~ i + [m] + i
     p [Let's do the ] + x
-    y ~ [mb]:x
+    bool y ~ [mb]:x
     x < [mambo] ? {
         p r x
-        y ~ 0
+        bool y ~ 0
     }
     p y
     p [a]:x & r ~ y ~
-    timer~[]
+    str timer~[]
     while r ~ [...]:timer ~ do {
         p [cha]
-        timer ~ timer + [.]
+        str timer ~ timer + [.]
     }
 
 # something else your instructor should know?

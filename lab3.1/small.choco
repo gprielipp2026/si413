@@ -1,0 +1,5 @@
+p [Hello world!]
+p [Bool]:[Boolean]
+val ~ [Boolean]
+@p val : [Bool] <-- fails, why does it fail?
+p (val : [Bool])

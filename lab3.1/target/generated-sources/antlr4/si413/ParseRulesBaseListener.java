@@ -197,6 +197,18 @@ public class ParseRulesBaseListener implements ParseRulesListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterStringVar(ParseRules.StringVarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStringVar(ParseRules.StringVarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBoolLitExpr(ParseRules.BoolLitExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -252,6 +264,18 @@ public class ParseRulesBaseListener implements ParseRulesListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBoolBinOpExpr(ParseRules.BoolBinOpExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBoolVar(ParseRules.BoolVarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolVar(ParseRules.BoolVarContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

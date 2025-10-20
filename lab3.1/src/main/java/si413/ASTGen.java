@@ -31,10 +31,8 @@ public class ASTGen {
 
         @Override
         public Stmt.Block visitContextProg(ParseRules.ContextProgContext ctx) {
-            Stmt first = stmtVis.visit(ctx.stmt);
             Stmt.Block rest = visit(ctx.prog());
             List<Stmt> children = new ArrayList<>();
-            children.add(first);
             children.addAll(rest.children());
             return new Stmt.Block(children);
         }
@@ -61,27 +59,39 @@ public class ASTGen {
 
         @Override
         public Stmt visitBoolAssignStmt(ParseRules.BoolAssignStmtContext ctx) {
-            return null;
+            String id = ctx.ID().getText();
+            Expr<Boolean> val = boolExprVis.visit(ctx.boolExpr());
+            return new Stmt.AssignBool(id, val);
         }
 
         @Override
         public Stmt visitStringAssignStmt(ParseRules.StringAssignStmtContext ctx) {
-            return null;
+            String id = ctx.ID().getText();
+            Expr<String> val = strExprVis.visit(ctx.strExpr());
+            return new Stmt.AssignString(id, val);
         }
 
         @Override
         public Stmt visitIfStmt(ParseRules.IfStmtContext ctx) {
-            return null;
+            Expr<Boolean> condition = boolExprVis.visit(ctx.boolExpr());
+            Stmt ifBody = progVis.visit(ctx.prog());
+            Stmt elseBody = new Stmt.Block(null);
+            return new Stmt.IfElse(condition, ifBody, elseBody);
         }
 
         @Override
         public Stmt visitIfElseStmt(ParseRules.IfElseStmtContext ctx) {
-            return null;
+            Expr<Boolean> condition = boolExprVis.visit(ctx.boolExpr());
+            Stmt ifBody = progVis.visit(ctx.prog(0));
+            Stmt elseBody = progVis.visit(ctx.prog(1));
+            return new Stmt.IfElse(condition, ifBody, elseBody);
         }
 
         @Override
         public Stmt visitWhileStmt(ParseRules.WhileStmtContext ctx) {
-            return null;
+            Expr<Boolean> condition = boolExprVis.visit(ctx.boolExpr());
+            Stmt body = progVis.visit(ctx.prog());
+            return new Stmt.While(condition, body);
         }
     }
 
@@ -97,6 +107,12 @@ public class ASTGen {
                 sb.append(raw.charAt(i));
             }
             return new Expr.StringLit(sb.toString());
+        }
+
+        @Override
+        public Expr<String> visitStringVar(ParseRules.StringVarContext ctx) {
+            String id = ctx.ID().getText();
+            return new Expr.StrVar(id);
         }
 
         @Override
@@ -133,6 +149,12 @@ public class ASTGen {
         @Override
         public Expr<Boolean> visitBoolLitExpr(ParseRules.BoolLitExprContext ctx) {
             return new Expr.BoolLit(ctx.BOOL().getText().equals("1"));
+        }
+
+        @Override
+        public Expr<Boolean> visitBoolVar(ParseRules.BoolVarContext ctx) {
+            String id = ctx.ID().getText();
+            return new Expr.BoolVar(id);
         }
 
         @Override

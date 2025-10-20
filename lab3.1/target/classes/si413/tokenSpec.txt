@@ -1,8 +1,8 @@
 TILDE:        ~
-LB:           {
-RB:           }
-LP:           (
-RP:           )
+LB:           \{
+RB:           \}
+LP:           \(
+RP:           \)
 STROP:        \+
 OP:           &|\||:|<|>
 BOOL:         0|1

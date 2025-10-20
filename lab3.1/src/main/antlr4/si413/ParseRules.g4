@@ -2,8 +2,8 @@
 parser grammar ParseRules;
 
 tokens {
-  TILDE, LB, RB, OP, BOOL, PRINT, INPUT, REV, LIT, IF, THEN, ELSE, LOOP, TYPE, ID
-  }
+  TILDE, LB, RB, LP, RP, STROP, OP, BOOL, PRINT, INPUT, REV, LIT, IF, THEN, ELSE, LOOP, TYPE, ID
+}
 
 prog
   : stmt prog  #RegularProg
@@ -14,8 +14,8 @@ prog
 stmt
   : PRINT boolExpr                #BoolPrint
   | PRINT strExpr                 #StringPrint
-  | TYPE ID TILDE boolExpr             #BoolAssignStmt 
-  | TYPE ID TILDE strExpr              #StringAssignStmt 
+  | ID TILDE boolExpr             #BoolAssignStmt 
+  | ID TILDE strExpr              #StringAssignStmt
   | boolExpr IF prog                  #IfStmt
   | boolExpr IF prog ELSE prog        #IfElseStmt
   | LOOP boolExpr THEN prog           #WhileStmt
@@ -24,6 +24,7 @@ stmt
 strExpr
   : strExpr STROP strExpr #StringBinOpExpr
   | LIT                   #StringLitExpr
+  | ID                    #StringVar
   | INPUT                 #InputExpr
   | REV TILDE strExpr TILDE  #RevStrExpr
   | LP strExpr RP         #ReorderStrExpr           
@@ -31,6 +32,7 @@ strExpr
 
 boolExpr
   : BOOL                     #BoolLitExpr
+  | ID                       #BoolVar
   | boolExpr OP boolExpr     #BoolBinOpExpr
   | strExpr OP strExpr       #StringCompareExpr
   | REV TILDE boolExpr TILDE #BoolNotExpr

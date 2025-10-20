@@ -188,6 +188,18 @@ public interface ParseRulesListener extends ParseTreeListener {
 	 */
 	void exitStringBinOpExpr(ParseRules.StringBinOpExprContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code StringVar}
+	 * labeled alternative in {@link ParseRules#strExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringVar(ParseRules.StringVarContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code StringVar}
+	 * labeled alternative in {@link ParseRules#strExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringVar(ParseRules.StringVarContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code BoolLitExpr}
 	 * labeled alternative in {@link ParseRules#boolExpr}.
 	 * @param ctx the parse tree
@@ -247,4 +259,16 @@ public interface ParseRulesListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBoolBinOpExpr(ParseRules.BoolBinOpExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code BoolVar}
+	 * labeled alternative in {@link ParseRules#boolExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolVar(ParseRules.BoolVarContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code BoolVar}
+	 * labeled alternative in {@link ParseRules#boolExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolVar(ParseRules.BoolVarContext ctx);
 }

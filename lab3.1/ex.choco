@@ -1,14 +1,14 @@
 p [Enter your name:]
-name ~ i
-[Bill]:name ? p (name + [ is a good name])
+name~i
+([Bill]:name) ? { p (name + [ is a good name]) }
 
 p [Guess a color]
 color ~ [red]
 guess ~ i
-while guess:color & color:guess do {
-  guess < color ? {
+while (guess:color & color:guess) do {
+  (guess < color) ? {
     p [Your guess is less than the color]
-  } ; guess > color ? {
+  } ; (guess > color) ? {
     p [Your guess is greater than my color]
   } 
 

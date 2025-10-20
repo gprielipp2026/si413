@@ -116,6 +116,13 @@ public interface ParseRulesVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStringBinOpExpr(ParseRules.StringBinOpExprContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code StringVar}
+	 * labeled alternative in {@link ParseRules#strExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStringVar(ParseRules.StringVarContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code BoolLitExpr}
 	 * labeled alternative in {@link ParseRules#boolExpr}.
 	 * @param ctx the parse tree
@@ -150,4 +157,11 @@ public interface ParseRulesVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBoolBinOpExpr(ParseRules.BoolBinOpExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BoolVar}
+	 * labeled alternative in {@link ParseRules#boolExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolVar(ParseRules.BoolVarContext ctx);
 }
