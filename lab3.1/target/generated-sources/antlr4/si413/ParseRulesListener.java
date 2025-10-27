@@ -44,6 +44,18 @@ public interface ParseRulesListener extends ParseTreeListener {
 	 */
 	void exitEmptyProg(ParseRules.EmptyProgContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code EmptyStmtList}
+	 * labeled alternative in {@link ParseRules#prog}.
+	 * @param ctx the parse tree
+	 */
+	void enterEmptyStmtList(ParseRules.EmptyStmtListContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code EmptyStmtList}
+	 * labeled alternative in {@link ParseRules#prog}.
+	 * @param ctx the parse tree
+	 */
+	void exitEmptyStmtList(ParseRules.EmptyStmtListContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code BoolPrint}
 	 * labeled alternative in {@link ParseRules#stmt}.
 	 * @param ctx the parse tree
@@ -91,18 +103,6 @@ public interface ParseRulesListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStringAssignStmt(ParseRules.StringAssignStmtContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code IfStmt}
-	 * labeled alternative in {@link ParseRules#stmt}.
-	 * @param ctx the parse tree
-	 */
-	void enterIfStmt(ParseRules.IfStmtContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code IfStmt}
-	 * labeled alternative in {@link ParseRules#stmt}.
-	 * @param ctx the parse tree
-	 */
-	void exitIfStmt(ParseRules.IfStmtContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code IfElseStmt}
 	 * labeled alternative in {@link ParseRules#stmt}.

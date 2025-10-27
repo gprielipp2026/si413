@@ -1,6 +1,6 @@
 package si413;
 
-/** This file contains a generic tokenizer based on the tokenSpec.txt file.
+/* This file contains a generic tokenizer based on the tokenSpec.txt file.
  * You should NOT need to change anything here - just change the
  * tokenSpec.txt file for your language as needed.
  * This is version 2.0 of the tokenizer. It reads in the entire input into
@@ -33,7 +33,7 @@ import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.misc.Pair;
 
-/** Generic Tokenizer (aka Scanner or Lexer) based on Java regex library.
+/* Generic Tokenizer (aka Scanner or Lexer) based on Java regex library.
  * Reads token specifications from a plain text file, by default in
  * main/resources/si413/tokenSpec.txt
  *

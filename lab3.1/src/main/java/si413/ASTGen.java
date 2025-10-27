@@ -41,6 +41,11 @@ public class ASTGen {
         public Stmt.Block visitEmptyProg(ParseRules.EmptyProgContext ctx) {
             return new Stmt.Block(List.of());
         }
+
+        @Override
+        public Stmt.Block visitEmptyStmtList(ParseRules.EmptyStmtListContext ctx) {
+            return new Stmt.Block(List.of());
+        }
     }
 
 
@@ -59,31 +64,36 @@ public class ASTGen {
 
         @Override
         public Stmt visitBoolAssignStmt(ParseRules.BoolAssignStmtContext ctx) {
-            String id = ctx.ID().getText();
+            String id = ctx.BID().getText();
             Expr<Boolean> val = boolExprVis.visit(ctx.boolExpr());
             return new Stmt.AssignBool(id, val);
         }
 
         @Override
         public Stmt visitStringAssignStmt(ParseRules.StringAssignStmtContext ctx) {
-            String id = ctx.ID().getText();
+            String id = ctx.SID().getText();
             Expr<String> val = strExprVis.visit(ctx.strExpr());
             return new Stmt.AssignString(id, val);
         }
 
-        @Override
-        public Stmt visitIfStmt(ParseRules.IfStmtContext ctx) {
-            Expr<Boolean> condition = boolExprVis.visit(ctx.boolExpr());
-            Stmt ifBody = progVis.visit(ctx.prog());
-            Stmt elseBody = new Stmt.Block(null);
-            return new Stmt.IfElse(condition, ifBody, elseBody);
-        }
+        // @Override
+        // public Stmt visitIfStmt(ParseRules.IfStmtContext ctx) {
+        // Expr<Boolean> condition = boolExprVis.visit(ctx.boolExpr());
+        // Stmt ifBody = progVis.visit(ctx.prog());
+        // Stmt elseBody = new Stmt.Block(null);
+        // return new Stmt.IfElse(condition, ifBody, elseBody);
+        // }
+        // | IF LP boolExpr RP LB prog RB #IfStmt
 
         @Override
         public Stmt visitIfElseStmt(ParseRules.IfElseStmtContext ctx) {
             Expr<Boolean> condition = boolExprVis.visit(ctx.boolExpr());
             Stmt ifBody = progVis.visit(ctx.prog(0));
-            Stmt elseBody = progVis.visit(ctx.prog(1));
+            Stmt elseBody;
+            if (ctx.prog().size() == 2)
+                elseBody = progVis.visit(ctx.prog(1));
+            else
+                elseBody = new Stmt.Block(List.of()); // empty else stmt
             return new Stmt.IfElse(condition, ifBody, elseBody);
         }
 
@@ -111,7 +121,7 @@ public class ASTGen {
 
         @Override
         public Expr<String> visitStringVar(ParseRules.StringVarContext ctx) {
-            String id = ctx.ID().getText();
+            String id = ctx.SID().getText();
             return new Expr.StrVar(id);
         }
 
@@ -153,7 +163,7 @@ public class ASTGen {
 
         @Override
         public Expr<Boolean> visitBoolVar(ParseRules.BoolVarContext ctx) {
-            String id = ctx.ID().getText();
+            String id = ctx.BID().getText();
             return new Expr.BoolVar(id);
         }
 
@@ -178,9 +188,13 @@ public class ASTGen {
             String op = ctx.OP().getText();
 
             if(op.equals("<")) return new Expr.StrLess(lhs, rhs);
-            else if (op.equals(">")) return new Expr.StrLess(rhs, lhs);
-            else if (op.equals(":")) return new Expr.Contains(lhs, rhs);
-            else Errors.error("Cannot do bool " + op + " bool.");
+            else if (op.equals(">"))
+                return new Expr.StrLess(rhs, lhs); // lhs > rhs <=> rhs < lhs
+            else if (op.equals(":"))
+                return new Expr.Contains(rhs, lhs); // rhs contains lhs (our syntax is lhs:rhs ==> lhs in rhs ? <=> rhs
+                                                    // contains lhs?)
+            else
+                Errors.error("Cannot do str " + op + " str.");
             return null;
         }
 

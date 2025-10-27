@@ -53,6 +53,18 @@ public class ParseRulesBaseListener implements ParseRulesListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterEmptyStmtList(ParseRules.EmptyStmtListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEmptyStmtList(ParseRules.EmptyStmtListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBoolPrint(ParseRules.BoolPrintContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -96,18 +108,6 @@ public class ParseRulesBaseListener implements ParseRulesListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStringAssignStmt(ParseRules.StringAssignStmtContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterIfStmt(ParseRules.IfStmtContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitIfStmt(ParseRules.IfStmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -25,23 +25,24 @@ language_explanation: |
 # this is the example program that you make up
 example_program: |
     p [Enter your name:]
-    str name ~ i
-    [Bill]:name ? p (name + [ is a good name])
+    s.name~i
+    ? ([Bill]:s.name)  { p (s.name + [ is a good name]) }
 
     p [Guess a color]
-    str color ~ [red]
-    str guess ~ i
-    while guess:color & color:guess do {
-        guess < color ? {
-            p [Your guess is less than the color]
-        } ; guess > color ? {
-            p [Your guess is greater than my color]
-        } 
+    s.color ~ [red]
+    s.guess ~ i
+    while (r ((s.guess:s.color) & (s.color:s.guess)) ) do {
+    ? (s.guess < s.color) {
+        p [Your guess is less than the color]
+    } ; {
+        ? (s.guess > s.color) {
+        p [Your guess is greater than the color]
+        }
+    } 
 
-        r ~ (guess:color & color:guess) ~ ? guess~i
+    ? (r ((s.guess:s.color) & (s.color:s.guess))) { s.guess~i }
     }
     p [You guessed correct!]
-
 
 example_input_1: |
     Bill
@@ -75,19 +76,19 @@ example_output_2: |
 # your implementation of the "dance" program in your language
 dance_program: |
     p [enter two dance moves]
-    str x ~ i + [m] + i
-    p [Let's do the ] + x
-    bool y ~ [mb]:x
-    x < [mambo] ? {
-        p r x
-        bool y ~ 0
+    s.x ~ i + [m] + i
+    p [Let's do the ] + s.x
+    b.y ~ [mb]:s.x
+    ? (s.x < [mambo]) {
+        p r s.x
+        b.y ~ 0
     }
-    p y
-    p [a]:x & r ~ y ~
-    str timer~[]
-    while r ~ [...]:timer ~ do {
+    p b.y
+    p ([a]:s.x & r b.y)
+    s.timer~[]
+    while (r ([...]:s.timer)) do {
         p [cha]
-        str timer ~ timer + [.]
+        s.timer ~ s.timer + [.]
     }
 
 # something else your instructor should know?

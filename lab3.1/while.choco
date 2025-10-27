@@ -1,0 +1,7 @@
+s.t~[]
+while (r ([...]:s.t)) do {
+  p s.t
+  p r [...]:s.t
+  s.t~s.t + [.]
+}
+p s.t

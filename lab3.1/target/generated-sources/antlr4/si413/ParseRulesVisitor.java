@@ -32,6 +32,13 @@ public interface ParseRulesVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitEmptyProg(ParseRules.EmptyProgContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code EmptyStmtList}
+	 * labeled alternative in {@link ParseRules#prog}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEmptyStmtList(ParseRules.EmptyStmtListContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code BoolPrint}
 	 * labeled alternative in {@link ParseRules#stmt}.
 	 * @param ctx the parse tree
@@ -59,13 +66,6 @@ public interface ParseRulesVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitStringAssignStmt(ParseRules.StringAssignStmtContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code IfStmt}
-	 * labeled alternative in {@link ParseRules#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIfStmt(ParseRules.IfStmtContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code IfElseStmt}
 	 * labeled alternative in {@link ParseRules#stmt}.
