@@ -216,61 +216,78 @@ attributes #9 = { noreturn nounwind }
 !5 = !{!"Debian clang version 16.0.6 (15~deb12u1)"}
 !6 = distinct !{!6, !7}
 !7 = !{!"llvm.loop.mustprogress"}
+declare void @free(ptr)
 
 define i32 @main() {
   %reg1 = and i1 false, false
-  %reg2 = alloca i1
-  store i1 %reg1, ptr %reg2
-  %reg3 = load i1, ptr %reg2
-  %reg4 = alloca i1  br i1 %reg3, label %true_2, label %false_2
+  %b.test = alloca i1
+  store i1 %reg1, ptr %b.test
+  %reg2 = load i1, ptr %b.test
+  %reg3 = alloca i1
+  br i1 %reg2, label %true_2, label %false_2
 
 true_2:
-  %reg6 = load i1, ptr %reg5
-  store i1 %reg6, ptr %reg4
-  br %done_2
+  %reg4 = call ptr @read_line()
+  %reg5 = call i1 @string_contains(ptr %reg4, ptr @lit1)
+  store i1 %reg5, ptr %reg3
+  call void @free(ptr %reg4)
+  br label %done_2
 
 false_2:
-  store i1 0, ptr %reg4
-  br %done_2
-  %reg7 = load i1, ptr %reg4  br i1 %reg7, label %if_1, label %else_1
+  store i1 0, ptr %reg3
+  br label %done_2
+
+done_2:
+  %reg6 = load i1, ptr %reg3
+  br i1 %reg6, label %if_1, label %else_1
 
 if_1:
-  call i32 @puts(ptr @lit1)
+  call i32 @puts(ptr @lit2)
   br label %done_1
 
 else_1:
+  call i32 @puts(ptr @lit3)
   br label %done_1
 
 done_1:
-  %reg8 = or i1 true, true
-  %reg2 = alloca i1
-  store i1 %reg8, ptr %reg2
-  %reg9 = load i1, ptr %reg2
-  %reg10 = alloca i1
-  br i1 %reg9, label %true_4, label %false_4
+  call i32 @puts(ptr @lit4)
+  %reg7 = or i1 true, true
+  store i1 %reg7, ptr %b.test  %reg8 = load i1, ptr %b.test
+  %reg9 = alloca i1
+  br i1 %reg8, label %true_4, label %false_4
 
 true_4:
-  store i1 1, ptr %reg10
+  store i1 1, ptr %reg9
   br label %done_4
 
 false_4:
-  %reg11 = load i1, ptr %reg5
-  store i1 %reg11, ptr %reg10
+  %reg10 = call ptr @read_line()
+  %reg11 = call i1 @string_contains(ptr %reg10, ptr @lit5)
+  store i1 %reg11, ptr %reg9
+  call void @free(ptr %reg10)
   br label %done_4
 
 done_4:
-  %reg12 = load i1, ptr %reg10
+  %reg12 = load i1, ptr %reg9
   br i1 %reg12, label %if_3, label %else_3
 
 if_3:
-  call i32 @puts(ptr @lit2)
+  call i32 @puts(ptr @lit6)
   br label %done_3
 
 else_3:
+  call i32 @puts(ptr @lit7)
   br label %done_3
 
 done_3:
+  call i32 @puts(ptr @lit8)
   ret i32 0
 }
-@lit1 = constant [36 x i8] c"Could error if b.false is looked at\00"
+@lit1 = constant [2 x i8] c".\00"
 @lit2 = constant [36 x i8] c"Could error if b.false is looked at\00"
+@lit3 = constant [12 x i8] c"Test passed\00"
+@lit4 = constant [14 x i8] c"One test done\00"
+@lit5 = constant [2 x i8] c".\00"
+@lit6 = constant [12 x i8] c"Test passed\00"
+@lit7 = constant [6 x i8] c"Ummmm\00"
+@lit8 = constant [14 x i8] c"Two test done\00"

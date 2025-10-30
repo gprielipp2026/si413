@@ -65,6 +65,7 @@ public interface Stmt {
                 comp.dest().format("  %s = call i32 @strlen(ptr %s)\n", size, val);
                 comp.dest().format("  %s = call ptr @malloc(i32 %s)\n", var, size);
                 comp.dest().format("  call i32 @strcpy(ptr %s, ptr %s)\n", var, val);
+                comp.reqFree(var);
             }
         }
     }
@@ -79,9 +80,16 @@ public interface Stmt {
         @Override
         public void compile(Compiler comp) {
             String valReg = child.compile(comp);
-            String reg = comp.getVar(name, false);
-            comp.dest().format("  %s = alloca i1\n", reg);
-            comp.dest().format("  store i1 %s, ptr %s\n", valReg, reg);
+
+            if(comp.containsBoolVar(name)) {
+                String var = comp.getVar(name, false);
+
+                comp.dest().format("  store i1 %s, ptr %s", valReg, var);
+            } else {
+                String reg = comp.getVar(name, false);
+                comp.dest().format("  %s = alloca i1\n", reg);
+                comp.dest().format("  store i1 %s, ptr %s\n", valReg, reg);
+            }
         }
     }
 
@@ -142,11 +150,13 @@ public interface Stmt {
             // if code block
             comp.dest().format("\nif_%d:\n", x);
             ifBody.compile(comp);
+            comp.free();
             comp.dest().format("  br label %%done_%d\n", x);
 
             // else code block
             comp.dest().format("\nelse_%d:\n", x);
             elseBody.compile(comp);
+            comp.free();
             comp.dest().format("  br label %%done_%d\n", x);
 
             // done label
@@ -181,11 +191,13 @@ public interface Stmt {
             // cond block
             comp.dest().format("\ncond_%d:\n", x);
             String cond = condition.compile(comp);
+            comp.free();
             comp.dest().format("  br i1 %s, label %%loop_%d, label %%done_%d\n", cond, x, x);
 
             // loop block
             comp.dest().format("\nloop_%d:\n", x);
             body.compile(comp);
+            comp.free();
             comp.dest().format("  br label %%cond_%d\n", x);
 
             // done block

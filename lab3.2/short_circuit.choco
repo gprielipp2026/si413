@@ -1,11 +1,18 @@
 b.test ~ 0
 
-? (b.test & b.false) {
+? (b.test & [.]:i) {
   p [Could error if b.false is looked at]
+} ; {
+  p [Test passed]
 }
 
+p [One test done]
 b.test ~ 1
  
-? (b.test | b.false) {
-  p [Could error if b.false is looked at]
+? (b.test | [.]:i) {
+  p [Test passed]
+} ; {
+  p [Ummmm]
 }
+
+p [Two test done]

@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -30,6 +33,7 @@ public class Compiler {
     private List<String> literals = new ArrayList<>();
     private Map<String, Pair> vars = new HashMap<>();
     private int nextBlockNum = 1;
+    private Set<String> needFreed = new HashSet<>();
     
 
     /** Returns the open writer to the destination .ll file. */
@@ -42,6 +46,15 @@ public class Compiler {
         return String.format("%%reg%d", nextRegNum++);
     }
 
+    public void reqFree(String reg) { needFreed.add(reg); }
+
+    public void free() {
+        // free all of the memory that was used
+        for(String reg : needFreed) {
+            dest.format("  call void @free(ptr %s)\n", reg);
+        }
+        needFreed.clear();
+    }
 
     public int newBlock() { return nextBlockNum++; }
 
@@ -52,13 +65,17 @@ public class Compiler {
      */
     public String getVar(String name, Boolean isStrVar) {
         if(!vars.containsKey(name)) {
-            vars.put(name, new Pair(nextRegister(), isStrVar));
+            vars.put(name, new Pair(String.format("%%%s", name), isStrVar));
         }
         return vars.get(name).reg();
     }
 
     public boolean containsStrVar(String name) {
         return vars.containsKey(name) && vars.get(name).isStrVar();
+    }
+
+    public boolean containsBoolVar(String name) {
+        return vars.containsKey(name) && !vars.get(name).isStrVar();
     }
 
     /** Adds a new string to the list of literals.
@@ -85,6 +102,7 @@ public class Compiler {
                 if (line == null) break;
                 dest.println(line);
             }
+            dest.println("declare void @free(ptr)");
         }
 
         dest.println("\ndefine i32 @main() {");
@@ -92,6 +110,8 @@ public class Compiler {
         // call the AST root node compile method to fill in
         // the contents of main()
         astRoot.compile(this);
+
+        this.free();
 
         dest.println("  ret i32 0");
         dest.println("}");
