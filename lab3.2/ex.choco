@@ -1,0 +1,19 @@
+p [Enter your name:]
+s.name~i
+? ([Bill]:s.name)  { p (s.name + [ is a good name]) }
+
+p [Guess a color]
+s.color ~ [red]
+s.guess ~ i
+while (r ((s.guess:s.color) & (s.color:s.guess)) ) do {
+  ? (s.guess < s.color) {
+    p [Your guess is less than the color]
+  } ; {
+    ? (s.guess > s.color) {
+    p [Your guess is greater than my color]
+    }
+  } 
+
+  ? (r ((s.guess:s.color) & (s.color:s.guess))) { s.guess~i }
+}
+p [You guessed correct!]

@@ -1,0 +1,11 @@
+p str [Hello world!]
+p str [Bool : Boolean]
+p bool [Bool]:[Boolean]
+str val ~ i
+p bool (val : [Bool])
+
+? (val : [Bool]) {
+  p str [val contains Bool]
+} ; {
+  p str [val does not contain Bool]
+}

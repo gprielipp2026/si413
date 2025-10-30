@@ -1,0 +1,21 @@
+TILDE:        ~
+LB:           \{
+RB:           \}
+LP:           \(
+RP:           \)
+STROP:        \+
+OP:           &|\||:|<|>
+BOOL:         0|1
+PRINT:        p
+INPUT:        i
+REV:          r
+LIT:          \[([^\[\]\$]|\$\[|\$\]|\$\$)*\]
+IF:           \?
+THEN:         do
+ELSE:         ;
+LOOP:         while
+TBOOL:        bool
+TSTR:         str
+BID:          b\.[a-z]+
+SID:          s\.[a-z]+
+ignore:       @.*|[ \t\n]+

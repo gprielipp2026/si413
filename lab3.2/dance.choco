@@ -1,0 +1,15 @@
+p [enter two dance moves]
+s.x ~ i + [m] + i
+p [Let's do the ] + s.x
+b.y ~ [mb]:s.x
+? (s.x < [mambo]) {
+    p r s.x
+    b.y ~ 0
+}
+p b.y
+p (([a]:s.x) & (r b.y))
+s.timer~[]
+while (r ([...]:s.timer)) do {
+    p [cha]
+    s.timer ~ s.timer + [.]
+}
