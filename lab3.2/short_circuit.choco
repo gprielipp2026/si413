@@ -1,0 +1,11 @@
+b.test ~ 0
+
+? (b.test & b.false) {
+  p [Could error if b.false is looked at]
+}
+
+b.test ~ 1
+ 
+? (b.test | b.false) {
+  p [Could error if b.false is looked at]
+}

@@ -218,30 +218,59 @@ attributes #9 = { noreturn nounwind }
 !7 = !{!"llvm.loop.mustprogress"}
 
 define i32 @main() {
-  %reg1 = call i32 @strlen(ptr @lit1)
-  %reg2 = call ptr @malloc(i32 %reg1)
-  call i32 @strcpy(ptr %reg2, ptr @lit1)
-  br label %cond_1
+  %reg1 = and i1 false, false
+  %reg2 = alloca i1
+  store i1 %reg1, ptr %reg2
+  %reg3 = load i1, ptr %reg2
+  %reg4 = alloca i1  br i1 %reg3, label %true_2, label %false_2
 
-cond_1:
-  %reg3 = call i1 @string_contains(ptr %reg2, ptr @lit2)
-  %reg4 = xor i1 %reg3, true
-  br i1 %reg4, label %loop_1, label %done_1
+true_2:
+  %reg6 = load i1, ptr %reg5
+  store i1 %reg6, ptr %reg4
+  br %done_2
 
-loop_1:
-  call i32 @puts(ptr %reg2)
-  %reg5 = call ptr @reverse_string(ptr @lit3)
-  %reg6 = call i1 @string_contains(ptr %reg2, ptr %reg5)
-  call void @print_bool(i1 %reg6)
-  %reg7 = call ptr @concat_strings(ptr %reg2, ptr @lit4)
-  call i32 @strcpy(ptr %reg2, ptr %reg7)
-  br label %cond_1
+false_2:
+  store i1 0, ptr %reg4
+  br %done_2
+  %reg7 = load i1, ptr %reg4  br i1 %reg7, label %if_1, label %else_1
+
+if_1:
+  call i32 @puts(ptr @lit1)
+  br label %done_1
+
+else_1:
+  br label %done_1
 
 done_1:
-  call i32 @puts(ptr %reg2)
+  %reg8 = or i1 true, true
+  %reg2 = alloca i1
+  store i1 %reg8, ptr %reg2
+  %reg9 = load i1, ptr %reg2
+  %reg10 = alloca i1
+  br i1 %reg9, label %true_4, label %false_4
+
+true_4:
+  store i1 1, ptr %reg10
+  br label %done_4
+
+false_4:
+  %reg11 = load i1, ptr %reg5
+  store i1 %reg11, ptr %reg10
+  br label %done_4
+
+done_4:
+  %reg12 = load i1, ptr %reg10
+  br i1 %reg12, label %if_3, label %else_3
+
+if_3:
+  call i32 @puts(ptr @lit2)
+  br label %done_3
+
+else_3:
+  br label %done_3
+
+done_3:
   ret i32 0
 }
-@lit1 = constant [1 x i8] c"\00"
-@lit2 = constant [4 x i8] c"...\00"
-@lit3 = constant [4 x i8] c"...\00"
-@lit4 = constant [2 x i8] c".\00"
+@lit1 = constant [36 x i8] c"Could error if b.false is looked at\00"
+@lit2 = constant [36 x i8] c"Could error if b.false is looked at\00"
