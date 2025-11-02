@@ -40,17 +40,17 @@ declare noalias ptr @malloc(i64 noundef) #2
 declare ptr @strcpy(ptr noundef, ptr noundef) #3
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define dso_local void @reassign(ptr noundef %0, ptr noundef %1) #0 {
+define dso_local ptr @reassign(ptr noundef %0, ptr noundef %1) #0 {
   %3 = alloca ptr, align 8
   %4 = alloca ptr, align 8
   store ptr %0, ptr %3, align 8
   store ptr %1, ptr %4, align 8
   %5 = load ptr, ptr %3, align 8
-  call void @free(ptr noundef %5) #8
-  %6 = load ptr, ptr %4, align 8
-  %7 = call ptr @assign(ptr noundef %6)
-  store ptr %7, ptr %3, align 8
-  ret void
+  %6 = load ptr, ptr %5, align 8
+  call void @free(ptr noundef %6) #8
+  %7 = load ptr, ptr %4, align 8
+  %8 = call ptr @assign(ptr noundef %7)
+  ret ptr %8
 }
 
 ; Function Attrs: nounwind

@@ -40,17 +40,17 @@ declare noalias ptr @malloc(i64 noundef) #2
 declare ptr @strcpy(ptr noundef, ptr noundef) #3
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define dso_local void @reassign(ptr noundef %0, ptr noundef %1) #0 {
+define dso_local ptr @reassign(ptr noundef %0, ptr noundef %1) #0 {
   %3 = alloca ptr, align 8
   %4 = alloca ptr, align 8
   store ptr %0, ptr %3, align 8
   store ptr %1, ptr %4, align 8
   %5 = load ptr, ptr %3, align 8
-  call void @free(ptr noundef %5) #8
-  %6 = load ptr, ptr %4, align 8
-  %7 = call ptr @assign(ptr noundef %6)
-  store ptr %7, ptr %3, align 8
-  ret void
+  %6 = load ptr, ptr %5, align 8
+  call void @free(ptr noundef %6) #8
+  %7 = load ptr, ptr %4, align 8
+  %8 = call ptr @assign(ptr noundef %7)
+  ret ptr %8
 }
 
 ; Function Attrs: nounwind
@@ -270,83 +270,98 @@ define i32 @main() {
   %reg6 = call ptr @concat_strings(ptr %reg4, ptr %reg5)
   call void @free(ptr %reg4)
   call void @free(ptr %reg5)
-  %s.x_1 = call ptr @assign(ptr %reg6)
+  %s.x_1 = alloca ptr
+  %reg7 = call ptr @assign(ptr %reg6)
+  store ptr %reg7, ptr %s.x_1
   call void @free(ptr %reg6)
-  %reg7 = call ptr @strdup(ptr @lit3)
-  %reg8 = call ptr @concat_strings(ptr %reg7, ptr %s.x_1)
-  call void @free(ptr %reg7)
-  call i32 @puts(ptr %reg8)
+  %reg8 = call ptr @strdup(ptr @lit3)
+  %reg9 = load ptr, ptr %s.x_1
+  %reg10 = call ptr @concat_strings(ptr %reg8, ptr %reg9)
   call void @free(ptr %reg8)
-  %reg9 = call ptr @strdup(ptr @lit4)
-  %reg10 = call i1 @string_contains(ptr %s.x_1, ptr %reg9)
-  call void @free(ptr %reg9)
+  call i32 @puts(ptr %reg10)
+  call void @free(ptr %reg10)
+  %reg11 = load ptr, ptr %s.x_1
+  %reg12 = call ptr @strdup(ptr @lit4)
+  %reg13 = call i1 @string_contains(ptr %reg11, ptr %reg12)
+  call void @free(ptr %reg12)
   %b.y_1 = alloca i1
-  store i1 %reg10, ptr %b.y_1
-  %reg11 = call ptr @strdup(ptr @lit5)
-  %reg12 = call i1 @string_less(ptr %s.x_1, ptr %reg11)
-  call void @free(ptr %reg11)
-  br i1 %reg12, label %if_1, label %else_1
+  store i1 %reg13, ptr %b.y_1
+  %reg14 = load ptr, ptr %s.x_1
+  %reg15 = call ptr @strdup(ptr @lit5)
+  %reg16 = call i1 @string_less(ptr %reg14, ptr %reg15)
+  call void @free(ptr %reg15)
+  br i1 %reg16, label %if_1, label %else_1
 
 if_1:
-  %reg13 = call ptr @reverse_string(ptr %s.x_1)
-  call i32 @puts(ptr %reg13)
-  call void @free(ptr %reg13)
-  %reg14 = and i1 false, false
-  store i1 %reg14, ptr %b.y_1
+  %reg17 = load ptr, ptr %s.x_1
+  %reg18 = call ptr @reverse_string(ptr %reg17)
+  call i32 @puts(ptr %reg18)
+  call void @free(ptr %reg18)
+  %reg19 = and i1 false, false
+  store i1 %reg19, ptr %b.y_1
   br label %done_1
 
 else_1:
   br label %done_1
 
 done_1:
-  %reg15 = load i1, ptr %b.y_1
-  call void @print_bool(i1 %reg15)
-  %reg16 = call ptr @strdup(ptr @lit6)
-  %reg17 = call i1 @string_contains(ptr %s.x_1, ptr %reg16)
-  call void @free(ptr %reg16)
-  %reg18 = alloca i1
-  br i1 %reg17, label %true_2, label %false_2
+  %reg20 = load i1, ptr %b.y_1
+  call void @print_bool(i1 %reg20)
+  %reg21 = load ptr, ptr %s.x_1
+  %reg22 = call ptr @strdup(ptr @lit6)
+  %reg23 = call i1 @string_contains(ptr %reg21, ptr %reg22)
+  call void @free(ptr %reg22)
+  %reg24 = alloca i1
+  br i1 %reg23, label %true_2, label %false_2
 
 true_2:
-  %reg19 = load i1, ptr %b.y_1
-  %reg20 = xor i1 %reg19, true
-  store i1 %reg20, ptr %reg18
+  %reg25 = load i1, ptr %b.y_1
+  %reg26 = xor i1 %reg25, true
+  store i1 %reg26, ptr %reg24
   br label %done_2
 
 false_2:
-  store i1 0, ptr %reg18
+  store i1 0, ptr %reg24
   br label %done_2
 
 done_2:
-  %reg21 = load i1, ptr %reg18
-  call void @print_bool(i1 %reg21)
-  %reg22 = call ptr @strdup(ptr @lit7)
-  %s.timer_1 = call ptr @assign(ptr %reg22)
-  call void @free(ptr %reg22)
-  br label %cond_3
-
-cond_3:
-  %reg23 = call ptr @strdup(ptr @lit8)
-  %reg24 = call i1 @string_contains(ptr %s.timer_1, ptr %reg23)
-  call void @free(ptr %reg23)
-  %reg25 = xor i1 %reg24, true
-  br i1 %reg25, label %loop_3, label %done_3
-
-loop_3:
-  call i32 @puts(ptr %s.timer_1)
-  %reg26 = call ptr @strdup(ptr @lit9)
-  call i32 @puts(ptr %reg26)
-  call void @free(ptr %reg26)
-  %reg27 = call ptr @strdup(ptr @lit10)
-  %reg28 = call ptr @concat_strings(ptr %s.timer_1, ptr %reg27)
-  call void @free(ptr %reg27)
-  call void @reassign(ptr %s.timer_1, ptr %reg28)
+  %reg27 = load i1, ptr %reg24
+  call void @print_bool(i1 %reg27)
+  %reg28 = call ptr @strdup(ptr @lit7)
+  %s.timer_1 = alloca ptr
+  %reg29 = call ptr @assign(ptr %reg28)
+  store ptr %reg29, ptr %s.timer_1
   call void @free(ptr %reg28)
   br label %cond_3
 
+cond_3:
+  %reg30 = load ptr, ptr %s.timer_1
+  %reg31 = call ptr @strdup(ptr @lit8)
+  %reg32 = call i1 @string_contains(ptr %reg30, ptr %reg31)
+  call void @free(ptr %reg31)
+  %reg33 = xor i1 %reg32, true
+  br i1 %reg33, label %loop_3, label %done_3
+
+loop_3:
+  %reg34 = load ptr, ptr %s.timer_1
+  call i32 @puts(ptr %reg34)
+  %reg35 = call ptr @strdup(ptr @lit9)
+  call i32 @puts(ptr %reg35)
+  call void @free(ptr %reg35)
+  %reg36 = load ptr, ptr %s.timer_1
+  %reg37 = call ptr @strdup(ptr @lit10)
+  %reg38 = call ptr @concat_strings(ptr %reg36, ptr %reg37)
+  call void @free(ptr %reg37)
+  %reg39 = call ptr @reassign(ptr %s.timer_1, ptr %reg38)
+  store ptr %reg39, ptr %s.timer_1
+  call void @free(ptr %reg38)
+  br label %cond_3
+
 done_3:
-  call void @free(ptr %s.timer_1)
-  call void @free(ptr %s.x_1)
+  %reg40 = load ptr, ptr %s.timer_1
+  call void @free(ptr %reg40)
+  %reg41 = load ptr, ptr %s.x_1
+  call void @free(ptr %reg41)
   ret i32 0
 }
 @lit1 = constant [22 x i8] c"enter two dance moves\00"

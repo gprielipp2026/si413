@@ -18,7 +18,6 @@ si413/Expr.class
 si413/Expr$Reverse.class
 si413/Tokenizer$Tokens.class
 si413/Compiler$Pair.class
-si413/ParseRules.interp
 si413/Expr$StrVar.class
 si413/Compiler.class
 si413/ParseRulesBaseVisitor.class
@@ -28,7 +27,6 @@ si413/ParseRules$StringBinOpExprContext.class
 si413/Expr$StringLit.class
 si413/ParseRules$WhileStmtContext.class
 si413/Stmt$IfElse.class
-ParseRules.tokens
 si413/Expr$StrLess.class
 si413/Tokenizer.class
 si413/Expr$Or.class

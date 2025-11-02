@@ -44,7 +44,14 @@ public interface Expr<T> {
                 return Errors.error(String.format("undefined string variable %s", name));
             }
 
-            return comp.getVar(name, true);
+            // need a new register to store the value of the string
+            String reg = comp.nextRegister();
+            String var = comp.getVar(name, true);
+
+            comp.addRegPtrToVar(var, reg);
+            comp.dest().format("  %s = load ptr, ptr %s\n", reg, var);
+
+            return reg;
         }
     }
 

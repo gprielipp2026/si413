@@ -10,9 +10,9 @@ char* assign(const char* value) {
   return variable;
 }
 
-void reassign(char* variable, const char* value) {
-  free(variable);
-  variable = assign(value);
+char* reassign(char** variable, const char* value) {
+  free(*variable);
+  return assign(value);
 }
 
 char* reverse_string(const char* original) {

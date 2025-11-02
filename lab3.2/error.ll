@@ -46,11 +46,10 @@ define dso_local ptr @reassign(ptr noundef %0, ptr noundef %1) #0 {
   store ptr %0, ptr %3, align 8
   store ptr %1, ptr %4, align 8
   %5 = load ptr, ptr %3, align 8
-  %6 = load ptr, ptr %5, align 8
-  call void @free(ptr noundef %6) #8
-  %7 = load ptr, ptr %4, align 8
-  %8 = call ptr @assign(ptr noundef %7)
-  ret ptr %8
+  call void @free(ptr noundef %5) #8
+  %6 = load ptr, ptr %4, align 8
+  %7 = call ptr @assign(ptr noundef %6)
+  ret ptr %7
 }
 
 ; Function Attrs: nounwind
@@ -255,3 +254,17 @@ attributes #9 = { noreturn nounwind }
 !5 = !{!"Ubuntu clang version 22.0.0 (++20251015042503+856555bfd843-1~exp1~20251015042630.2731)"}
 !6 = distinct !{!6, !7}
 !7 = !{!"llvm.loop.mustprogress"}
+declare ptr @strdup(ptr)
+
+define i32 @main() {
+  %reg1 = call ptr @strdup(ptr @lit1)
+  %s.x_1 = call ptr @assign(ptr %reg1)
+  call void @free(ptr %reg1)
+  %reg2 = call ptr @strdup(ptr @lit2)
+  %s.x_2 = call ptr @reassign(ptr %s.x_1, ptr %reg2)
+  call void @free(ptr %reg2)
+  call void @free(ptr %s.x_2)
+  ret i32 0
+}
+@lit1 = constant [1 x i8] c"\00"
+@lit2 = constant [1 x i8] c"\00"

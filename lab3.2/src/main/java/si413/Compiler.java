@@ -85,6 +85,10 @@ public class Compiler {
         return vars.get(name).reg();
     }
 
+    public void addRegPtrToVar(String var, String reg) {
+        strVarRegs.add(reg); // this is getting alloca'd and does not need freed
+    }
+
     public void reassign(String name) {
         Pair var = vars.get(name);
         String reg = String.format("%%%s_%d", name, var.numAssigned() + 1);
@@ -137,7 +141,11 @@ public class Compiler {
         // free all of the str variables
         for (Pair var : vars.values()) {
             if (var.isStrVar()) {
-                dest.format("  call void @free(ptr %s)\n", var.reg());
+                String reg = nextRegister();
+                dest.format("  %s = load ptr, ptr %s\n", reg, var.reg());
+                dest.format("  call void @free(ptr %s)\n", reg);
+                // dest.format(" call void @free(ptr %s)\n", var.reg());
+                // don't think I need to do since I alloca the ptr
             }
         }
 

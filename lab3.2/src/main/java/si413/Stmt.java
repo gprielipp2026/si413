@@ -80,10 +80,15 @@ public interface Stmt {
 
             if(comp.containsStrVar(name)) {
                 String var = comp.getVar(name, true);
-                comp.dest().format("  call void @reassign(ptr %s, ptr %s)\n", var, val);
+                String reg = comp.nextRegister();
+                comp.dest().format("  %s = call ptr @reassign(ptr %s, ptr %s)\n", reg, var, val);
+                comp.dest().format("  store ptr %s, ptr %s\n", reg, var);
             } else {
                 String var = comp.getVar(name, true);
-                comp.dest().format("  %s = call ptr @assign(ptr %s)\n", var, val);
+                comp.dest().format("  %s = alloca ptr\n", var);
+                String reg = comp.nextRegister();
+                comp.dest().format("  %s = call ptr @assign(ptr %s)\n", reg, val);
+                comp.dest().format("  store ptr %s, ptr %s\n", reg, var);
             }
 
             comp.free(List.of(val));
