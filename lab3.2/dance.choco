@@ -10,6 +10,7 @@ p b.y
 p (([a]:s.x) & (r b.y))
 s.timer~[]
 while (r ([...]:s.timer)) do {
+    p s.timer
     p [cha]
     s.timer ~ s.timer + [.]
 }

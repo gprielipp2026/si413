@@ -1,5 +1,7 @@
 package si413;
 
+import java.util.List;
+
 /** AST nodes for expressions.
  * Expressions can be evaluated and return a value.
  * In the interface the return type is the generic type T.
@@ -56,11 +58,13 @@ public interface Expr<T> {
 
         @Override
         public String compile(Compiler comp) {
-            String lreg = lhs.compile(comp);
-            String rreg = rhs.compile(comp);
+            String lreg = comp.maybeDup(lhs.compile(comp));
+            String rreg = comp.maybeDup(rhs.compile(comp));
             String res = comp.nextRegister();
+
             comp.dest().format("  %s = call ptr @concat_strings(ptr %s, ptr %s)\n", res, lreg, rreg);
-            comp.reqFree(res);
+            comp.free(List.of(lreg, rreg));
+
             return res;
         }
     }
@@ -74,10 +78,11 @@ public interface Expr<T> {
 
         @Override
         public String compile(Compiler comp) {
-            String chreg = child.compile(comp);
+            String chreg = comp.maybeDup(child.compile(comp));
             String res = comp.nextRegister();
             comp.dest().format("  %s = call ptr @reverse_string(ptr %s)\n", res, chreg);
-            comp.reqFree(res);
+            comp.free(List.of(chreg));
+
             return res;
         }
     }
@@ -92,7 +97,7 @@ public interface Expr<T> {
         public String compile(Compiler comp) {
             String res = comp.nextRegister();
             comp.dest().format("  %s = call ptr @read_line()\n", res);
-            comp.reqFree(res);
+
             return res;
         }
     }
@@ -146,10 +151,13 @@ public interface Expr<T> {
 
         @Override
         public String compile(Compiler comp) {
-            String lreg = lhs.compile(comp);
-            String rreg = rhs.compile(comp);
+            String lreg = comp.maybeDup(lhs.compile(comp));
+            String rreg = comp.maybeDup(rhs.compile(comp));
             String res = comp.nextRegister();
+
             comp.dest().format("  %s = call i1 @string_less(ptr %s, ptr %s)\n", res, lreg, rreg);
+            comp.free(List.of(lreg, rreg));
+
             return res;
         }
     }
@@ -164,10 +172,14 @@ public interface Expr<T> {
 
         @Override
         public String compile(Compiler comp) {
-            String lreg = lhs.compile(comp);
-            String rreg = rhs.compile(comp);
+            // check the registers to see if they need duplicated
+            String lreg = comp.maybeDup(lhs.compile(comp));
+            String rreg = comp.maybeDup(rhs.compile(comp));
             String res = comp.nextRegister();
+
             comp.dest().format("  %s = call i1 @string_contains(ptr %s, ptr %s)\n", res, lreg, rreg);
+            comp.free(List.of(lreg, rreg));
+
             return res;
         }
     }
@@ -213,13 +225,11 @@ public interface Expr<T> {
             comp.dest().format("\ntrue_%d:\n", x);
             String rreg = rhs.compile(comp);
             comp.dest().format("  store i1 %s, ptr %s\n", rreg, res);
-            comp.free();
             comp.dest().format("  br label %%done_%d\n", x);
 
             // false_x
             comp.dest().format("\nfalse_%d:\n", x);
             comp.dest().format("  store i1 0, ptr %s\n", res);
-            comp.free();
             comp.dest().format("  br label %%done_%d\n", x);
 
             // done_x
@@ -270,14 +280,12 @@ public interface Expr<T> {
             // true_x
             comp.dest().format("\ntrue_%d:\n", x);
             comp.dest().format("  store i1 1, ptr %s\n", res);
-            comp.free();
             comp.dest().format("  br label %%done_%d\n", x);
 
             // false_x
             comp.dest().format("\nfalse_%d:\n", x);
             String rreg = rhs.compile(comp);
             comp.dest().format("  store i1 %s, ptr %s\n", rreg, res);
-            comp.free();
             comp.dest().format("  br label %%done_%d\n", x);
 
             // done_x:

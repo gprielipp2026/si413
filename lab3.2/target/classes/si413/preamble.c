@@ -3,6 +3,18 @@
 #include <string.h>
 #include <stdbool.h>
 
+char* assign(const char* value) {
+  ssize_t length = strlen(value);
+  char* variable = malloc(sizeof(char) * (length + 1));
+  strcpy(variable, value);
+  return variable;
+}
+
+void reassign(char* variable, const char* value) {
+  free(variable);
+  variable = assign(value);
+}
+
 char* reverse_string(const char* original) {
   int n = strlen(original);
   char* reversed = malloc(n+1);

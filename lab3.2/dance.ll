@@ -255,3 +255,107 @@ attributes #9 = { noreturn nounwind }
 !5 = !{!"Ubuntu clang version 22.0.0 (++20251015042503+856555bfd843-1~exp1~20251015042630.2731)"}
 !6 = distinct !{!6, !7}
 !7 = !{!"llvm.loop.mustprogress"}
+declare ptr @strdup(ptr)
+
+define i32 @main() {
+  %reg1 = call ptr @strdup(ptr @lit1)
+  call i32 @puts(ptr %reg1)
+  call void @free(ptr %reg1)
+  %reg2 = call ptr @read_line()
+  %reg3 = call ptr @strdup(ptr @lit2)
+  %reg4 = call ptr @concat_strings(ptr %reg2, ptr %reg3)
+  call void @free(ptr %reg2)
+  call void @free(ptr %reg3)
+  %reg5 = call ptr @read_line()
+  %reg6 = call ptr @concat_strings(ptr %reg4, ptr %reg5)
+  call void @free(ptr %reg4)
+  call void @free(ptr %reg5)
+  %s.x_1 = call ptr @assign(ptr %reg6)
+  call void @free(ptr %reg6)
+  %reg7 = call ptr @strdup(ptr @lit3)
+  %reg8 = call ptr @concat_strings(ptr %reg7, ptr %s.x_1)
+  call void @free(ptr %reg7)
+  call i32 @puts(ptr %reg8)
+  call void @free(ptr %reg8)
+  %reg9 = call ptr @strdup(ptr @lit4)
+  %reg10 = call i1 @string_contains(ptr %s.x_1, ptr %reg9)
+  call void @free(ptr %reg9)
+  %b.y_1 = alloca i1
+  store i1 %reg10, ptr %b.y_1
+  %reg11 = call ptr @strdup(ptr @lit5)
+  %reg12 = call i1 @string_less(ptr %s.x_1, ptr %reg11)
+  call void @free(ptr %reg11)
+  br i1 %reg12, label %if_1, label %else_1
+
+if_1:
+  %reg13 = call ptr @reverse_string(ptr %s.x_1)
+  call i32 @puts(ptr %reg13)
+  call void @free(ptr %reg13)
+  %reg14 = and i1 false, false
+  store i1 %reg14, ptr %b.y_1
+  br label %done_1
+
+else_1:
+  br label %done_1
+
+done_1:
+  %reg15 = load i1, ptr %b.y_1
+  call void @print_bool(i1 %reg15)
+  %reg16 = call ptr @strdup(ptr @lit6)
+  %reg17 = call i1 @string_contains(ptr %s.x_1, ptr %reg16)
+  call void @free(ptr %reg16)
+  %reg18 = alloca i1
+  br i1 %reg17, label %true_2, label %false_2
+
+true_2:
+  %reg19 = load i1, ptr %b.y_1
+  %reg20 = xor i1 %reg19, true
+  store i1 %reg20, ptr %reg18
+  br label %done_2
+
+false_2:
+  store i1 0, ptr %reg18
+  br label %done_2
+
+done_2:
+  %reg21 = load i1, ptr %reg18
+  call void @print_bool(i1 %reg21)
+  %reg22 = call ptr @strdup(ptr @lit7)
+  %s.timer_1 = call ptr @assign(ptr %reg22)
+  call void @free(ptr %reg22)
+  br label %cond_3
+
+cond_3:
+  %reg23 = call ptr @strdup(ptr @lit8)
+  %reg24 = call i1 @string_contains(ptr %s.timer_1, ptr %reg23)
+  call void @free(ptr %reg23)
+  %reg25 = xor i1 %reg24, true
+  br i1 %reg25, label %loop_3, label %done_3
+
+loop_3:
+  call i32 @puts(ptr %s.timer_1)
+  %reg26 = call ptr @strdup(ptr @lit9)
+  call i32 @puts(ptr %reg26)
+  call void @free(ptr %reg26)
+  %reg27 = call ptr @strdup(ptr @lit10)
+  %reg28 = call ptr @concat_strings(ptr %s.timer_1, ptr %reg27)
+  call void @free(ptr %reg27)
+  call void @reassign(ptr %s.timer_1, ptr %reg28)
+  call void @free(ptr %reg28)
+  br label %cond_3
+
+done_3:
+  call void @free(ptr %s.timer_1)
+  call void @free(ptr %s.x_1)
+  ret i32 0
+}
+@lit1 = constant [22 x i8] c"enter two dance moves\00"
+@lit2 = constant [2 x i8] c"m\00"
+@lit3 = constant [14 x i8] c"Let's do the \00"
+@lit4 = constant [3 x i8] c"mb\00"
+@lit5 = constant [6 x i8] c"mambo\00"
+@lit6 = constant [2 x i8] c"a\00"
+@lit7 = constant [1 x i8] c"\00"
+@lit8 = constant [4 x i8] c"...\00"
+@lit9 = constant [4 x i8] c"cha\00"
+@lit10 = constant [2 x i8] c".\00"
