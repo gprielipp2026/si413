@@ -22,8 +22,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
  * that AST.
  */
 public class Compiler {
-    private record Pair(String reg, Boolean isStrVar) {
-
+    private record Pair(String reg, Boolean isStrVar, Integer numAssigned) {
     }
 
     // These objects are used to manage the state of the compiler
@@ -31,10 +30,10 @@ public class Compiler {
     private PrintWriter dest;
     private int nextRegNum = 1;
     private List<String> literals = new ArrayList<>();
+    private Set<String> litRegs = new HashSet<>();
     private Map<String, Pair> vars = new HashMap<>();
     private int nextBlockNum = 1;
-    private Set<String> needFreed = new HashSet<>();
-    
+    private Set<String> strVarRegs = new HashSet<>();
 
     /** Returns the open writer to the destination .ll file. */
     public PrintWriter dest() { return dest; }
@@ -46,14 +45,26 @@ public class Compiler {
         return String.format("%%reg%d", nextRegNum++);
     }
 
-    public void reqFree(String reg) { needFreed.add(reg); }
+    public boolean isLiteral(String reg) {
+        return litRegs.contains(reg);
+    }
 
-    public void free() {
-        // free all of the memory that was used
-        for(String reg : needFreed) {
-            dest.format("  call void @free(ptr %s)\n", reg);
+    public String maybeDup(String reg) {
+        if (isLiteral(reg)) {
+            String dup = nextRegister();
+            dest.format("  %s = call ptr @strdup(ptr %s)\n", dup, reg);
+            return dup;
         }
-        needFreed.clear();
+        return reg;
+    }
+
+    public void free(List<String> regs) {
+        for (String reg : regs) {
+            // only want to free non-variables
+            if (!strVarRegs.contains(reg)) {
+                dest.format("  call void @free(ptr %s)\n", reg);
+            }
+        }
     }
 
     public int newBlock() { return nextBlockNum++; }
@@ -65,9 +76,23 @@ public class Compiler {
      */
     public String getVar(String name, Boolean isStrVar) {
         if(!vars.containsKey(name)) {
-            vars.put(name, new Pair(String.format("%%%s", name), isStrVar));
+            String reg = String.format("%%%s_1", name);
+            vars.put(name, new Pair(reg, isStrVar, 1));
+            if (isStrVar) {
+                strVarRegs.add(reg);
+            }
         }
         return vars.get(name).reg();
+    }
+
+    public void addRegPtrToVar(String var, String reg) {
+        strVarRegs.add(reg); // this is getting alloca'd and does not need freed
+    }
+
+    public void reassign(String name) {
+        Pair var = vars.get(name);
+        String reg = String.format("%%%s_%d", name, var.numAssigned() + 1);
+        vars.put(name, new Pair(reg, var.isStrVar(), var.numAssigned() + 1));
     }
 
     public boolean containsStrVar(String name) {
@@ -83,7 +108,9 @@ public class Compiler {
      */
     public String addStringLit(String str) {
         literals.add(str);
-        return String.format("@lit%d", literals.size());
+        String litReg = String.format("@lit%d", literals.size());
+        litRegs.add(litReg);
+        return litReg;
     }
 
     /** Constructor for the Compiler object given the output ll file. */
@@ -102,7 +129,7 @@ public class Compiler {
                 if (line == null) break;
                 dest.println(line);
             }
-            dest.println("declare void @free(ptr)");
+            dest.println("declare ptr @strdup(ptr)");
         }
 
         dest.println("\ndefine i32 @main() {");
@@ -111,7 +138,16 @@ public class Compiler {
         // the contents of main()
         astRoot.compile(this);
 
-        this.free();
+        // free all of the str variables
+        for (Pair var : vars.values()) {
+            if (var.isStrVar()) {
+                String reg = nextRegister();
+                dest.format("  %s = load ptr, ptr %s\n", reg, var.reg());
+                dest.format("  call void @free(ptr %s)\n", reg);
+                // dest.format(" call void @free(ptr %s)\n", var.reg());
+                // don't think I need to do since I alloca the ptr
+            }
+        }
 
         dest.println("  ret i32 0");
         dest.println("}");

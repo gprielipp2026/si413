@@ -255,3 +255,122 @@ attributes #9 = { noreturn nounwind }
 !5 = !{!"Ubuntu clang version 22.0.0 (++20251015042503+856555bfd843-1~exp1~20251015042630.2731)"}
 !6 = distinct !{!6, !7}
 !7 = !{!"llvm.loop.mustprogress"}
+declare ptr @strdup(ptr)
+
+define i32 @main() {
+  %reg1 = call ptr @strdup(ptr @lit1)
+  call i32 @puts(ptr %reg1)
+  call void @free(ptr %reg1)
+  %reg2 = call ptr @read_line()
+  %reg3 = call ptr @strdup(ptr @lit2)
+  %reg4 = call ptr @concat_strings(ptr %reg2, ptr %reg3)
+  call void @free(ptr %reg2)
+  call void @free(ptr %reg3)
+  %reg5 = call ptr @read_line()
+  %reg6 = call ptr @concat_strings(ptr %reg4, ptr %reg5)
+  call void @free(ptr %reg4)
+  call void @free(ptr %reg5)
+  %s.x_1 = alloca ptr
+  %reg7 = call ptr @assign(ptr %reg6)
+  store ptr %reg7, ptr %s.x_1
+  call void @free(ptr %reg6)
+  %reg8 = call ptr @strdup(ptr @lit3)
+  %reg9 = load ptr, ptr %s.x_1
+  %reg10 = call ptr @concat_strings(ptr %reg8, ptr %reg9)
+  call void @free(ptr %reg8)
+  call i32 @puts(ptr %reg10)
+  call void @free(ptr %reg10)
+  %reg11 = load ptr, ptr %s.x_1
+  %reg12 = call ptr @strdup(ptr @lit4)
+  %reg13 = call i1 @string_contains(ptr %reg11, ptr %reg12)
+  call void @free(ptr %reg12)
+  %b.y_1 = alloca i1
+  store i1 %reg13, ptr %b.y_1
+  %reg14 = load ptr, ptr %s.x_1
+  %reg15 = call ptr @strdup(ptr @lit5)
+  %reg16 = call i1 @string_less(ptr %reg14, ptr %reg15)
+  call void @free(ptr %reg15)
+  br i1 %reg16, label %if_1, label %else_1
+
+if_1:
+  %reg17 = load ptr, ptr %s.x_1
+  %reg18 = call ptr @reverse_string(ptr %reg17)
+  call i32 @puts(ptr %reg18)
+  call void @free(ptr %reg18)
+  %reg19 = and i1 false, false
+  store i1 %reg19, ptr %b.y_1
+  br label %done_1
+
+else_1:
+  br label %done_1
+
+done_1:
+  %reg20 = load i1, ptr %b.y_1
+  call void @print_bool(i1 %reg20)
+  %reg21 = load ptr, ptr %s.x_1
+  %reg22 = call ptr @strdup(ptr @lit6)
+  %reg23 = call i1 @string_contains(ptr %reg21, ptr %reg22)
+  call void @free(ptr %reg22)
+  %reg24 = alloca i1
+  br i1 %reg23, label %true_2, label %false_2
+
+true_2:
+  %reg25 = load i1, ptr %b.y_1
+  %reg26 = xor i1 %reg25, true
+  store i1 %reg26, ptr %reg24
+  br label %done_2
+
+false_2:
+  store i1 0, ptr %reg24
+  br label %done_2
+
+done_2:
+  %reg27 = load i1, ptr %reg24
+  call void @print_bool(i1 %reg27)
+  %reg28 = call ptr @strdup(ptr @lit7)
+  %s.timer_1 = alloca ptr
+  %reg29 = call ptr @assign(ptr %reg28)
+  store ptr %reg29, ptr %s.timer_1
+  call void @free(ptr %reg28)
+  br label %cond_3
+
+cond_3:
+  %reg30 = load ptr, ptr %s.timer_1
+  %reg31 = call ptr @strdup(ptr @lit8)
+  %reg32 = call i1 @string_contains(ptr %reg30, ptr %reg31)
+  call void @free(ptr %reg31)
+  %reg33 = xor i1 %reg32, true
+  br i1 %reg33, label %loop_3, label %done_3
+
+loop_3:
+  %reg34 = load ptr, ptr %s.timer_1
+  call i32 @puts(ptr %reg34)
+  %reg35 = call ptr @strdup(ptr @lit9)
+  call i32 @puts(ptr %reg35)
+  call void @free(ptr %reg35)
+  %reg36 = load ptr, ptr %s.timer_1
+  %reg37 = call ptr @strdup(ptr @lit10)
+  %reg38 = call ptr @concat_strings(ptr %reg36, ptr %reg37)
+  call void @free(ptr %reg37)
+  %reg39 = call ptr @reassign(ptr %s.timer_1, ptr %reg38)
+  store ptr %reg39, ptr %s.timer_1
+  call void @free(ptr %reg38)
+  br label %cond_3
+
+done_3:
+  %reg40 = load ptr, ptr %s.timer_1
+  call void @free(ptr %reg40)
+  %reg41 = load ptr, ptr %s.x_1
+  call void @free(ptr %reg41)
+  ret i32 0
+}
+@lit1 = constant [22 x i8] c"enter two dance moves\00"
+@lit2 = constant [2 x i8] c"m\00"
+@lit3 = constant [14 x i8] c"Let's do the \00"
+@lit4 = constant [3 x i8] c"mb\00"
+@lit5 = constant [6 x i8] c"mambo\00"
+@lit6 = constant [2 x i8] c"a\00"
+@lit7 = constant [1 x i8] c"\00"
+@lit8 = constant [4 x i8] c"...\00"
+@lit9 = constant [4 x i8] c"cha\00"
+@lit10 = constant [2 x i8] c".\00"

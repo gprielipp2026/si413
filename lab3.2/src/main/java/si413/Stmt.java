@@ -54,19 +54,44 @@ public interface Stmt {
 
         @Override
         public void compile(Compiler comp) {
-            String val = child.compile(comp);
+            String val = comp.maybeDup(child.compile(comp));
+
+            // if(comp.containsStrVar(name)) {
+            // String var = comp.getVar(name, true);
+            // comp.dest().format(" call void @free(ptr %s)\n", var);
+            // // comp.reassign(name);
+            // }
+
+            // String size = comp.nextRegister();
+            // comp.dest().format(" %s = call i32 @strlen(ptr %s)\n", size, val);
+            // String plus1 = comp.nextRegister();
+            // comp.dest().format(" %s = add i32 %s, 1\n", plus1, size);
+
+            // String var = comp.getVar(name, true);
+            // comp.dest().format(" %s = call ptr @malloc(i32 %s)\n", var, plus1);
+
+            // comp.dest().format(" call i32 @strcpy(ptr %s, ptr %s)\n", var, val);
+            // // add null terminator
+            // String end = comp.nextRegister();
+            // String off = comp.nextRegister();
+            // comp.dest().format(" %s = sext i32 %s to i64", off, size);
+            // comp.dest().format(" %s = getelementptr i8, ptr %s, i64 %s", end, var, off);
+            // comp.dest().format(" store i8 0, ptr %s", end);
 
             if(comp.containsStrVar(name)) {
                 String var = comp.getVar(name, true);
-                comp.dest().format("  call i32 @strcpy(ptr %s, ptr %s)\n", var, val);
+                String reg = comp.nextRegister();
+                comp.dest().format("  %s = call ptr @reassign(ptr %s, ptr %s)\n", reg, var, val);
+                comp.dest().format("  store ptr %s, ptr %s\n", reg, var);
             } else {
-                String size = comp.nextRegister();
                 String var = comp.getVar(name, true);
-                comp.dest().format("  %s = call i32 @strlen(ptr %s)\n", size, val);
-                comp.dest().format("  %s = call ptr @malloc(i32 %s)\n", var, size);
-                comp.dest().format("  call i32 @strcpy(ptr %s, ptr %s)\n", var, val);
-                comp.reqFree(var);
+                comp.dest().format("  %s = alloca ptr\n", var);
+                String reg = comp.nextRegister();
+                comp.dest().format("  %s = call ptr @assign(ptr %s)\n", reg, val);
+                comp.dest().format("  store ptr %s, ptr %s\n", reg, var);
             }
+
+            comp.free(List.of(val));
         }
     }
 
@@ -84,7 +109,7 @@ public interface Stmt {
             if(comp.containsBoolVar(name)) {
                 String var = comp.getVar(name, false);
 
-                comp.dest().format("  store i1 %s, ptr %s", valReg, var);
+                comp.dest().format("  store i1 %s, ptr %s\n", valReg, var);
             } else {
                 String reg = comp.getVar(name, false);
                 comp.dest().format("  %s = alloca i1\n", reg);
@@ -101,8 +126,11 @@ public interface Stmt {
 
         @Override
         public void compile(Compiler comp) {
-            String chreg = child.compile(comp);
+            String chreg = comp.maybeDup(child.compile(comp));
+
             comp.dest().format("  call i32 @puts(ptr %s)\n", chreg);
+
+            comp.free(List.of(chreg));
         }
     }
 
@@ -150,13 +178,11 @@ public interface Stmt {
             // if code block
             comp.dest().format("\nif_%d:\n", x);
             ifBody.compile(comp);
-            comp.free();
             comp.dest().format("  br label %%done_%d\n", x);
 
             // else code block
             comp.dest().format("\nelse_%d:\n", x);
             elseBody.compile(comp);
-            comp.free();
             comp.dest().format("  br label %%done_%d\n", x);
 
             // done label
@@ -191,13 +217,11 @@ public interface Stmt {
             // cond block
             comp.dest().format("\ncond_%d:\n", x);
             String cond = condition.compile(comp);
-            comp.free();
             comp.dest().format("  br i1 %s, label %%loop_%d, label %%done_%d\n", cond, x, x);
 
             // loop block
             comp.dest().format("\nloop_%d:\n", x);
             body.compile(comp);
-            comp.free();
             comp.dest().format("  br label %%cond_%d\n", x);
 
             // done block
