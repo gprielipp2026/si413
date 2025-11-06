@@ -1,0 +1,94 @@
+# SI413 Lab 4.1: Spec and interpreter for iffy language
+
+your_name: George Prielipp
+
+your_alpha: 265112
+
+used_ai: N # remember to turn in an aichat.md file as well
+
+# leave this as NONE for your initial submission
+changes_on_resubmit: |
+    NONE
+
+# describe any collaboration or help you got from classmates
+collaboration: |
+    NONE
+
+# come up with an original name for your new langauge
+language_name: feather
+
+# explain a little what inspired your language and why it's cool
+language_explanation: |
+    I wanted a lightweight language that doesn't have a ton of typing required to have fully functional programs.
+    It's cool because it should take the fewest keystrokes to make a program. And the ones you have to make should be short / close to the home row.
+
+# this is the example program that you make up
+example_program: |
+    BLAH BLAH
+    BLAH BLAH
+
+example_input_1: |
+    BLAH BLAH
+
+example_output_1: |
+    BLAH BLAH
+
+example_input_2: |
+    BLAH BLAH
+
+example_output_2: |
+    BLAH BLAH
+
+
+# your implementation of the "dinner" program in your language
+dinner_program: |
+    func table_tracker = (str name) -> func {
+        bool first = true;
+        str total = '';
+
+        func order = (str food) -> str {
+            ['Table ' . name . ' ordering ' . food];
+
+            ? (first) {
+                first = false;
+                total = food;
+            } : {
+                total = total . ', ' . food;
+            }
+
+            -> total;
+        }
+
+        -> order;
+    }
+
+    func string_eq = (str s1, str s2) -> bool {
+        -> !(s1 < s2) & !(s2 < s1);
+    }
+
+    func table1 = table_tracker('CS profs');
+    table1('Kimchi');
+
+    ['Your name?'];
+    func table2 = table_tracker(#);
+
+    bool done = false;
+    str t2got = 'nothing';
+    ~(!done) {
+        ['What do you want?'];
+        str food = #;
+        ? (string_eq(food, 'done')) {
+            done = true;
+        } : {
+            t2got = table2(food);    
+        }
+    }
+
+    table1('Tteokbokki');
+    total1 = table1('Samgyeopsal');
+
+    ['We got ' . total1 . ' and you got ' . t2got];
+
+# something else your instructor should know?
+any_other_comments_for_me: |
+    NONE

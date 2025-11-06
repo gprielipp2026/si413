@@ -1,0 +1,28 @@
+# FILL IN YOUR TOKEN DEFINITIONS HERE
+LP:         \(
+RP:         \)
+LB:         {
+RB:         }
+LSB:        \[
+RSB:        \]
+END:        ;
+SEP:        ,
+RETURN:     ->
+ASSIGN:     =
+BOOLOP:     & | \| | ! 
+STRCMP:     lt | in
+STRREV:     !
+STROP:      \.  
+INPUT:      #
+IF:         \?
+ELSE:       :
+WHILE:      \~
+FUNCTION:   func
+BOOLLIT:    true | false
+STRLIT:     \'(\\[ntr']|[^ntr'])*\'
+BOOLT:      bool
+STRT:       str
+VOID:       zip
+ID:         \$[a-zA-Z0-9_]+
+ignore:     %.*?$ | %%%.*?%%%
+ignore:     [ \t\n\r]
