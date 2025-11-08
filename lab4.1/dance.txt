@@ -1,0 +1,46 @@
+func table_tracker = (str name) -> func {
+    bool first = true;
+    str total = '';
+
+    func order = (str food) -> str {
+        ['Table ' . name . ' ordering ' . food];
+
+        ? (first) {
+            first = false;
+            total = food;
+        } : {
+            total = total . ', ' . food;
+        }
+
+        -> total;
+    };
+
+    -> order;
+};
+
+func string_eq = (str s1, str s2) -> bool {
+    -> !(s1 lt s2) & !(s2 lt s1);
+};
+
+func table1 = table_tracker('CS profs');
+table1('Kimchi');
+
+['Your name?'];
+func table2 = table_tracker(#);
+
+bool done = false;
+str t2got = 'nothing';
+~(!done) {
+    ['What do you want?'];
+    str food = #;
+    ? (string_eq(food, 'done')) {
+        done = true;
+    } : {
+        t2got = table2(food);    
+    }
+}
+
+table1('Tteokbokki');
+total1 = table1('Samgyeopsal');
+
+['We got ' . total1 . ' and you got ' . t2got];

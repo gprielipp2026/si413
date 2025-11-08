@@ -24,20 +24,52 @@ language_explanation: |
 
 # this is the example program that you make up
 example_program: |
-    BLAH BLAH
-    BLAH BLAH
+    func make_timer = (str inc) -> func {
+        str timer = inc;
+
+        func increment = () -> str {
+            timer = timer . inc;
+            -> timer;
+        };
+
+        -> increment;
+    };
+
+    ['Enter one character that you\'d like to use as a timer:'];
+    func timer = make_timer(#);
+
+    str val = '';
+    ['Enter that same character, but however many times you want to loop for:'];
+    str stop = #;
+    ~(! (stop in val)) {
+        ['timer = "' . val . '"'];
+        val = timer();
+    }
 
 example_input_1: |
-    BLAH BLAH
+    .
+    ...
 
 example_output_1: |
-    BLAH BLAH
+    Enter one character that you\'d like to use as a timer:
+    Enter that same character, but however many times you want to loop for:
+    timer = ""
+    timer = "."
+    timer = ".."
 
 example_input_2: |
-    BLAH BLAH
+    *
+    *****
 
 example_output_2: |
-    BLAH BLAH
+    Enter one character that you\'d like to use as a timer:
+    Enter that same character, but however many times you want to loop for:
+    timer = ""
+    timer = "*"
+    timer = "**"
+    timer = "***"
+    timer = "****"
+
 
 
 # your implementation of the "dinner" program in your language
@@ -57,14 +89,14 @@ dinner_program: |
             }
 
             -> total;
-        }
+        };
 
         -> order;
-    }
+    };
 
     func string_eq = (str s1, str s2) -> bool {
-        -> !(s1 < s2) & !(s2 < s1);
-    }
+        -> !(s1 lt s2) & !(s2 lt s1);
+    };
 
     func table1 = table_tracker('CS profs');
     table1('Kimchi');

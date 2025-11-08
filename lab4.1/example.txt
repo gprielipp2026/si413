@@ -1,0 +1,21 @@
+func make_timer = (str i) -> func {
+    str timer = i;
+
+    func increment = () -> str {
+        timer = timer . i;
+        -> timer;
+    };
+
+    -> increment;
+};
+
+['Enter one character that you\'d like to use as a timer:'];
+func timer = make_timer(#);
+
+str val = '';
+['Enter that same character, but however many times you want to loop for:'];
+str stop = #;
+~(! (stop in val)) {
+    ['timer = "' . val . '"'];
+    val = timer();
+}

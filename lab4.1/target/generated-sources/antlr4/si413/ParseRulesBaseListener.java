@@ -53,6 +53,18 @@ public class ParseRulesBaseListener implements ParseRulesListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterEmptyList(ParseRules.EmptyListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEmptyList(ParseRules.EmptyListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBoolVarAssign(ParseRules.BoolVarAssignContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -180,6 +192,18 @@ public class ParseRulesBaseListener implements ParseRulesListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitReturnStr(ParseRules.ReturnStrContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFunctionCallStmt(ParseRules.FunctionCallStmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFunctionCallStmt(ParseRules.FunctionCallStmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -396,6 +420,18 @@ public class ParseRulesBaseListener implements ParseRulesListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBoolReorder(ParseRules.BoolReorderContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNotBoolExpr(ParseRules.NotBoolExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNotBoolExpr(ParseRules.NotBoolExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

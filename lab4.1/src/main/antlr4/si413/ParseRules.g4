@@ -14,7 +14,7 @@ tokens {
   ASSIGN,
   BOOLOP,
   STRCMP,
-  STRREV,
+  NOT,
   STROP,
   INPUT,
   IF,
@@ -33,20 +33,22 @@ prog
   : stmt prog # NormalProg
   | LB stmt prog RB # ContextProg
   | EOF #EmptyProg
+  | #EmptyList
   ;
 
 stmt
   : BOOLT ID ASSIGN boolexpr END # BoolVarAssign
   | STRT ID ASSIGN strexpr END # StrVarAssign
-  | FUNC ID ASSIGN funcexpr END # FuncVarAssign
+  | FUNCTION ID ASSIGN funcexpr END # FuncVarAssign
   | ID ASSIGN boolexpr END # BoolReassign
   | ID ASSIGN strexpr END # StrReassign
   | LSB strexpr RSB END # PrintStr
   | LSB boolexpr RSB END # PrintBool
   | WHILE LP boolexpr RP LB prog RB # WhileLoop
-  | IF LP boolexpr RB LB prog RB (ELSE LB prog RB)? # IfElse
+  | IF LP boolexpr RP LB prog RB (ELSE LB prog RB)? # IfElse
   | RETURN boolexpr END # ReturnBool
   | RETURN strexpr END # ReturnStr
+  | ID LP exprlist RP END # FunctionCallStmt
   ;
 
 paramlist
@@ -77,7 +79,7 @@ exprliststuff
   ;
 
 funcexpr
-  : ID LP exprlist RB # FirstOrderCall
+  : ID LP exprlist RP # FirstOrderCall
   | LP paramlist RP RETURN BOOLT LB prog RB # BoolFuncDef
   | LP paramlist RP RETURN STRT LB prog RB # StrFuncDef
   | LP paramlist RP RETURN VOID LB prog RB # VoidFuncDef
@@ -87,15 +89,16 @@ funcexpr
 boolexpr
   : boolexpr BOOLOP boolexpr # BoolBinOp
   | strexpr STRCMP strexpr # StrCmp
-  | LP boolexpr RB # BoolReorder
+  | LP boolexpr RP # BoolReorder
   | ID LP exprlist RP # BoolFuncCall
+  | NOT boolexpr #NotBoolExpr
   | BOOLLIT # BoolLit
   | ID # GetBoolVar
   ;
 
 strexpr
   : strexpr STROP strexpr # StrBinOp
-  | STRREV strexpr # RevStr
+  | NOT strexpr # RevStr
   | LP strexpr RP # StrReorder
   | INPUT # Input
   | ID LP exprlist RP # StrFuncCall

@@ -44,6 +44,18 @@ public interface ParseRulesListener extends ParseTreeListener {
 	 */
 	void exitEmptyProg(ParseRules.EmptyProgContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code EmptyList}
+	 * labeled alternative in {@link ParseRules#prog}.
+	 * @param ctx the parse tree
+	 */
+	void enterEmptyList(ParseRules.EmptyListContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code EmptyList}
+	 * labeled alternative in {@link ParseRules#prog}.
+	 * @param ctx the parse tree
+	 */
+	void exitEmptyList(ParseRules.EmptyListContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code BoolVarAssign}
 	 * labeled alternative in {@link ParseRules#stmt}.
 	 * @param ctx the parse tree
@@ -175,6 +187,18 @@ public interface ParseRulesListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitReturnStr(ParseRules.ReturnStrContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code FunctionCallStmt}
+	 * labeled alternative in {@link ParseRules#stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionCallStmt(ParseRules.FunctionCallStmtContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FunctionCallStmt}
+	 * labeled alternative in {@link ParseRules#stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionCallStmt(ParseRules.FunctionCallStmtContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code FuncParams}
 	 * labeled alternative in {@link ParseRules#paramlist}.
@@ -391,6 +415,18 @@ public interface ParseRulesListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBoolReorder(ParseRules.BoolReorderContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code NotBoolExpr}
+	 * labeled alternative in {@link ParseRules#boolexpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotBoolExpr(ParseRules.NotBoolExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code NotBoolExpr}
+	 * labeled alternative in {@link ParseRules#boolexpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotBoolExpr(ParseRules.NotBoolExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code BoolBinOp}
 	 * labeled alternative in {@link ParseRules#boolexpr}.

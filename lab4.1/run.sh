@@ -15,7 +15,7 @@ else
   class=ParseTreeGen
 fi
 
-mvn -f"$topdir" clean compile exec:java \
+mvn -e -f"$topdir" clean compile exec:java \
   -Dorg.slf4j.simpleLogger.defaultLogLevel=warn \
   -Dexec.mainClass="si413.$class" \
   -Dexec.args="$*"

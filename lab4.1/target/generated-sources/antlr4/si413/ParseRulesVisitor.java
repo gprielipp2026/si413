@@ -32,6 +32,13 @@ public interface ParseRulesVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitEmptyProg(ParseRules.EmptyProgContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code EmptyList}
+	 * labeled alternative in {@link ParseRules#prog}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEmptyList(ParseRules.EmptyListContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code BoolVarAssign}
 	 * labeled alternative in {@link ParseRules#stmt}.
 	 * @param ctx the parse tree
@@ -108,6 +115,13 @@ public interface ParseRulesVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitReturnStr(ParseRules.ReturnStrContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code FunctionCallStmt}
+	 * labeled alternative in {@link ParseRules#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionCallStmt(ParseRules.FunctionCallStmtContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code FuncParams}
 	 * labeled alternative in {@link ParseRules#paramlist}.
@@ -234,6 +248,13 @@ public interface ParseRulesVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBoolReorder(ParseRules.BoolReorderContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NotBoolExpr}
+	 * labeled alternative in {@link ParseRules#boolexpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNotBoolExpr(ParseRules.NotBoolExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code BoolBinOp}
 	 * labeled alternative in {@link ParseRules#boolexpr}.
