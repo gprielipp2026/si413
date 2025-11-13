@@ -11,33 +11,26 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface ParseRulesVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by the {@code NormalProg}
+	 * Visit a parse tree produced by the {@code FullProg}
 	 * labeled alternative in {@link ParseRules#prog}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFullProg(ParseRules.FullProgContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NormalProg}
+	 * labeled alternative in {@link ParseRules#stmtList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitNormalProg(ParseRules.NormalProgContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ContextProg}
-	 * labeled alternative in {@link ParseRules#prog}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitContextProg(ParseRules.ContextProgContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code EmptyProg}
-	 * labeled alternative in {@link ParseRules#prog}.
+	 * labeled alternative in {@link ParseRules#stmtList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitEmptyProg(ParseRules.EmptyProgContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code EmptyList}
-	 * labeled alternative in {@link ParseRules#prog}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitEmptyList(ParseRules.EmptyListContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code BoolVarAssign}
 	 * labeled alternative in {@link ParseRules#stmt}.
@@ -101,20 +94,6 @@ public interface ParseRulesVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitIfElse(ParseRules.IfElseContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code ReturnBool}
-	 * labeled alternative in {@link ParseRules#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitReturnBool(ParseRules.ReturnBoolContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code ReturnStr}
-	 * labeled alternative in {@link ParseRules#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitReturnStr(ParseRules.ReturnStrContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code FunctionCallStmt}
 	 * labeled alternative in {@link ParseRules#stmt}.
@@ -241,6 +220,13 @@ public interface ParseRulesVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFirstOrderFunc(ParseRules.FirstOrderFuncContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code FunctionVarName}
+	 * labeled alternative in {@link ParseRules#funcexpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionVarName(ParseRules.FunctionVarNameContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code BoolReorder}
 	 * labeled alternative in {@link ParseRules#boolexpr}.

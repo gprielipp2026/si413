@@ -30,25 +30,25 @@ tokens {
 }
 
 prog
-  : stmt prog # NormalProg
-  | LB stmt prog RB # ContextProg
-  | EOF #EmptyProg
-  | #EmptyList
+  : stmtList EOF # FullProg
+  ;
+
+stmtList
+  : stmt END stmtList # NormalProg
+  | # EmptyProg
   ;
 
 stmt
-  : BOOLT ID ASSIGN boolexpr END # BoolVarAssign
-  | STRT ID ASSIGN strexpr END # StrVarAssign
-  | FUNCTION ID ASSIGN funcexpr END # FuncVarAssign
-  | ID ASSIGN boolexpr END # BoolReassign
-  | ID ASSIGN strexpr END # StrReassign
-  | LSB strexpr RSB END # PrintStr
-  | LSB boolexpr RSB END # PrintBool
-  | WHILE LP boolexpr RP LB prog RB # WhileLoop
-  | IF LP boolexpr RP LB prog RB (ELSE LB prog RB)? # IfElse
-  | RETURN boolexpr END # ReturnBool
-  | RETURN strexpr END # ReturnStr
-  | ID LP exprlist RP END # FunctionCallStmt
+  : BOOLT ID ASSIGN boolexpr # BoolVarAssign
+  | STRT ID ASSIGN strexpr # StrVarAssign
+  | FUNCTION ID ASSIGN funcexpr # FuncVarAssign
+  | ID ASSIGN boolexpr # BoolReassign
+  | ID ASSIGN strexpr # StrReassign
+  | LSB strexpr RSB # PrintStr
+  | LSB boolexpr RSB # PrintBool
+  | WHILE LP boolexpr RP LB stmtList RB # WhileLoop
+  | IF LP boolexpr RP LB stmtList RB (ELSE LB stmtList RB)? # IfElse
+  | ID LP exprlist RP # FunctionCallStmt
   ;
 
 paramlist
@@ -80,10 +80,11 @@ exprliststuff
 
 funcexpr
   : ID LP exprlist RP # FirstOrderCall
-  | LP paramlist RP RETURN BOOLT LB prog RB # BoolFuncDef
-  | LP paramlist RP RETURN STRT LB prog RB # StrFuncDef
-  | LP paramlist RP RETURN VOID LB prog RB # VoidFuncDef
-  | LP paramlist RP RETURN FUNCTION LB prog RB # FirstOrderFunc
+  | LP paramlist RP RETURN BOOLT LB stmtList BOOLT RETURN boolexpr END RB # BoolFuncDef
+  | LP paramlist RP RETURN STRT LB stmtList STRT RETURN strexpr END RB # StrFuncDef
+  | LP paramlist RP RETURN VOID LB stmtList RB # VoidFuncDef
+  | LP paramlist RP RETURN FUNCTION LB stmtList FUNCTION RETURN funcexpr END RB # FirstOrderFunc
+  | ID # FunctionVarName
   ;
 
 boolexpr

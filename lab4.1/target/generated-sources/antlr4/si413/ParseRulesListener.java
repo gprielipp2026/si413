@@ -8,53 +8,41 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface ParseRulesListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by the {@code NormalProg}
+	 * Enter a parse tree produced by the {@code FullProg}
 	 * labeled alternative in {@link ParseRules#prog}.
+	 * @param ctx the parse tree
+	 */
+	void enterFullProg(ParseRules.FullProgContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FullProg}
+	 * labeled alternative in {@link ParseRules#prog}.
+	 * @param ctx the parse tree
+	 */
+	void exitFullProg(ParseRules.FullProgContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code NormalProg}
+	 * labeled alternative in {@link ParseRules#stmtList}.
 	 * @param ctx the parse tree
 	 */
 	void enterNormalProg(ParseRules.NormalProgContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code NormalProg}
-	 * labeled alternative in {@link ParseRules#prog}.
+	 * labeled alternative in {@link ParseRules#stmtList}.
 	 * @param ctx the parse tree
 	 */
 	void exitNormalProg(ParseRules.NormalProgContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ContextProg}
-	 * labeled alternative in {@link ParseRules#prog}.
-	 * @param ctx the parse tree
-	 */
-	void enterContextProg(ParseRules.ContextProgContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ContextProg}
-	 * labeled alternative in {@link ParseRules#prog}.
-	 * @param ctx the parse tree
-	 */
-	void exitContextProg(ParseRules.ContextProgContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code EmptyProg}
-	 * labeled alternative in {@link ParseRules#prog}.
+	 * labeled alternative in {@link ParseRules#stmtList}.
 	 * @param ctx the parse tree
 	 */
 	void enterEmptyProg(ParseRules.EmptyProgContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code EmptyProg}
-	 * labeled alternative in {@link ParseRules#prog}.
+	 * labeled alternative in {@link ParseRules#stmtList}.
 	 * @param ctx the parse tree
 	 */
 	void exitEmptyProg(ParseRules.EmptyProgContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code EmptyList}
-	 * labeled alternative in {@link ParseRules#prog}.
-	 * @param ctx the parse tree
-	 */
-	void enterEmptyList(ParseRules.EmptyListContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code EmptyList}
-	 * labeled alternative in {@link ParseRules#prog}.
-	 * @param ctx the parse tree
-	 */
-	void exitEmptyList(ParseRules.EmptyListContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code BoolVarAssign}
 	 * labeled alternative in {@link ParseRules#stmt}.
@@ -163,30 +151,6 @@ public interface ParseRulesListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIfElse(ParseRules.IfElseContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ReturnBool}
-	 * labeled alternative in {@link ParseRules#stmt}.
-	 * @param ctx the parse tree
-	 */
-	void enterReturnBool(ParseRules.ReturnBoolContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ReturnBool}
-	 * labeled alternative in {@link ParseRules#stmt}.
-	 * @param ctx the parse tree
-	 */
-	void exitReturnBool(ParseRules.ReturnBoolContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ReturnStr}
-	 * labeled alternative in {@link ParseRules#stmt}.
-	 * @param ctx the parse tree
-	 */
-	void enterReturnStr(ParseRules.ReturnStrContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ReturnStr}
-	 * labeled alternative in {@link ParseRules#stmt}.
-	 * @param ctx the parse tree
-	 */
-	void exitReturnStr(ParseRules.ReturnStrContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code FunctionCallStmt}
 	 * labeled alternative in {@link ParseRules#stmt}.
@@ -403,6 +367,18 @@ public interface ParseRulesListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFirstOrderFunc(ParseRules.FirstOrderFuncContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code FunctionVarName}
+	 * labeled alternative in {@link ParseRules#funcexpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionVarName(ParseRules.FunctionVarNameContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FunctionVarName}
+	 * labeled alternative in {@link ParseRules#funcexpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionVarName(ParseRules.FunctionVarNameContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code BoolReorder}
 	 * labeled alternative in {@link ParseRules#boolexpr}.
