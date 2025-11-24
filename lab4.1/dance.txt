@@ -10,16 +10,16 @@ func table_tracker = (str name) -> func {
             total = food;
         } : {
             total = total . ', ' . food;
-        }
+        };
 
-        -> total;
+        str -> total;
     };
 
-    -> order;
+    func -> order;
 };
 
 func string_eq = (str s1, str s2) -> bool {
-    -> !(s1 lt s2) & !(s2 lt s1);
+    bool -> !(s1 lt s2) & !(s2 lt s1);
 };
 
 func table1 = table_tracker('CS profs');
@@ -37,8 +37,8 @@ str t2got = 'nothing';
         done = true;
     } : {
         t2got = table2(food);    
-    }
-}
+    };
+};
 
 table1('Tteokbokki');
 total1 = table1('Samgyeopsal');
