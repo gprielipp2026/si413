@@ -1,0 +1,21 @@
+display.S[Enter a number]
+store target -> ask.N
+
+i target lt N[1] {
+    display.S[Too small]
+    store target -> N[1234]
+}
+
+store cur -> N[1]
+w cur mul cur lt target {
+    store cur -> cur add N[1]
+}
+
+store prev -> cur minus N[1]
+i target minus prev mul prev lt cur mul cur minus target {
+    store sqrt -> prev
+} e {
+    store sqrt -> cur
+}
+
+display.S[Square root of ] + target + S[ is close to ] + sqrt

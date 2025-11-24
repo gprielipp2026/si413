@@ -1,0 +1,30 @@
+# SI413 Lab 5.1: Numbers and built-in functions
+
+your_name: BLAH BLAH
+
+your_alpha: BLAH
+
+used_ai: Y # remember to turn in an aichat.md file as well
+
+language_name: easyas
+
+# just enter a or b
+option: a
+
+# leave this as NONE for your initial submission
+changes_on_resubmit: |
+    NONE
+
+# describe any collaboration or help you got from classmates
+collaboration: |
+    NONE
+
+# something else your instructor should know?
+any_other_comments_for_me: |
+    NONE
+
+sqrt_program: |
+    This program is only for the "numbers"
+    option (B), so just leave it here exactly
+    like this and it will be ignored when
+    you submit.

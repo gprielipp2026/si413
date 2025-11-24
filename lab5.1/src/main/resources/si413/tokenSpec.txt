@@ -1,0 +1,36 @@
+DISPLAY:        display\.
+ASK:            ask\.
+STORE:          store
+IF:             i
+ELSE:           e
+WHILE:          w
+FUNC:           fct
+CALL:           ##
+LAMBDAARROW:    =>
+ASSIGN:         ->
+TYPES:          S
+TYPEB:          B
+TYPEN:          N
+BOOLLIT:        B\[(FR|LIES)\]
+STRLIT:         S\[((?:[^-\]]|-(?!\])|-\])*)\]
+NUMBER:         N\[[0-9]+(\.[0-9])?\]
+REVERSE:        \* *\(-1\)
+NOT:            \?
+LESSTHAN:       --
+GREATERTHAN:    \+\+
+CONTAINS:       \^
+CONCAT:         \+
+NEG:            neg
+MUL_DIV:        mul|div
+ADD_MINUS:      minus|add
+NUMBOOLOPS:     lt|gt|lte|gte|eq
+AND:            \#
+OR:             \!
+LPAREN:         \(
+RPAREN:         \)
+LCURLY:         \{
+RCURLY:         \}
+COMMA:          ,
+VARNAME:        [a-zA-Z0-9]+
+ignore:         @[^@]*@
+ignore:         [ \t\r\n]
