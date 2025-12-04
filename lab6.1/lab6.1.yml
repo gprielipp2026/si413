@@ -1,0 +1,31 @@
+# SI413 Lab 6.1: Esoteric Languages
+
+your_name: George Prielipp 
+
+your_alpha: 265112 
+
+language_name: BLAH
+
+# Put the direct link to your team's slides that got uploaded to the Google Drive folder
+# (Go to Share -> Copy link)
+slides_link: 'URL HERE'
+
+# Summarize in a few sentences what YOU PERSONALLY contributed to the group presentation.
+what_you_did: |
+  Gemini'd the presentation with my group. Then I tried to make a live demonstration but we did not have enough time for it. 
+
+# Vote for which presentation was the most ENGAGING.
+# Just put the name of the language like 'Hexagony'
+most_engaging: Chef
+
+# Vote for which presentation was the most INFORMATIVE.
+# Just put the name of the language like 'FRACTRAN'
+most_informative: Befunge 
+
+# Vote for which presentation was the most PROFESSIONAL and polished.
+# Just put the name of the language like 'Whenever'
+most_professional: Whitespace
+
+# something else your instructor should know?
+any_other_comments_for_me: |
+    NONE
